@@ -6,8 +6,8 @@
 /.idea
 /.vscode
 /.vagrant
-/cloud/downloads/facturas
-/cloud/files
+/cloud/downloads/facturas/
+/cloud/files/
 Homestead.json
 Homestead.yaml
 npm-debug.log
