@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
             $this->call(configTableSeeder::class);
-        // if($this->verification()){
+         if($this->verification()){
             $this->call(RolesTableSeeder::class);
             //$this->call(CompaniesTableSeeder::class);
             $this->call(UserTableSeeder::class);
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         //     $this->command->info("VERIFIQUE LA CONFIGURACION DEL CORREO Y VUELVA A EJECUTAR EL MISMO COMANDO");
         //     $this->command->info("****************************************************************************************************");
 
-        // }
+         }
      
     }
 
