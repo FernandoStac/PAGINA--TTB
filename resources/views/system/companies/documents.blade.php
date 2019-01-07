@@ -89,7 +89,7 @@
               <td>{{$document->serie}}</td>
               <td>{{$document->folio}}</td>
               <td>
-                    <a class="text-danger" href="{{url($route.$document->url.$document->document)}}">{{url($route.$document->url.$document->document)}}</a>
+                    <a class="text-danger" target="_blank" href="{{url($route.$document->url.$document->document)}}">{{url($route.$document->url.$document->document)}}</a>
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
 

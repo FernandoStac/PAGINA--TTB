@@ -25,6 +25,8 @@
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{ asset('assets/css/nucleo-icons.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/sweetalert/sweetalert2.css') }}" rel="stylesheet" />
+
     @yield('css')
 
 </head>
@@ -125,6 +127,7 @@
 
 <!--  Paper Kit Initialization and functons -->
 <script src="{{ asset('assets/js/paper-kit.js?v=2.1.0') }}"></script>
+<script src="{{ asset('assets/sweetalert/sweetalert2.min.js') }}"></script>
 
   @yield('scripts')
 </html>

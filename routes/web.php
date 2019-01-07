@@ -33,15 +33,15 @@ Route::middleware(['auth','admin'])->group(function () {
 	Route::get('/system/companie', 'CompanieController@index');//show
 	Route::post('/system/companie', 'CompanieController@store');//create
 	Route::post('/system/companie/edit/{id}', 'CompanieController@update');//update
-
-
-
-
-
 	Route::get('/system/companie/{companie}/documents', 'DocumentController@show')->name('system');
 	Route::get('/system/user.html', 'UserController@index');//show
 	Route::post('/system/user.html', 'UserController@store');//show
 	Route::post('/system/edit/user.html', 'UserController@update');//update
+
+
+	//role,type,access
+	Route::get('/type', 'typeController@index');//update
+
 });
 
 
@@ -56,6 +56,10 @@ Route::middleware(['auth','companie'])->group(function () {
 	//Route::get('/companie/document/load', 'DocumentController@index');
 	Route::post('/companie/document', 'DocumentController@store');
 	Route::delete('/document/delete/{id}','DocumentController@destroy');
+
+	Route::post('/document/delete','DocumentController@destroyed');
+
+	//Route::get('/try','DocumentController@try');
 
 });
 

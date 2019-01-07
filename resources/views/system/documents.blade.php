@@ -85,7 +85,7 @@
               <td>{{$document->name_user}}</td>
               <td>{{$document->name}}</td>
               <td>
-                    <a class="text-danger" href="{{url($document->url)}}">{{$document->document}}</a>
+                    <a class="text-danger" target="_blank" href="{{url($document->url)}}">{{$document->document}}</a>
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
               <td class="text-success">

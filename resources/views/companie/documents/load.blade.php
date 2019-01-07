@@ -32,16 +32,6 @@
       <div class="col-md-6">
 
 
-        <div class="alert alert-success alert-with-icon mess" style="display: none" data-notify="container">
-            <div class="container">
-                <div class="alert-wrapper">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i class="nc-icon nc-simple-remove"></i>
-                    </button>
-                    <div class="message"></div>
-                </div>
-            </div>
-        </div>
 
         <div class="card text-white bg-dark" style="border-radius: 0">
           <div class="card-body">
@@ -106,13 +96,32 @@
       var filePath = fileInput.value;
       var allowedExtensions = /(.pdf|.rar|.zip)$/i;
       if(!allowedExtensions.exec(filePath)){
-          alert('Solo se permiten archivos PDF, Zip, RAR');
+        Swal({
+              type: 'warning',
+              title: 'Oops...',
+              text: "Solo se permiten archivos en formato PDF, Zip, RAR",
+            });
+
           fileInput.value = '';
           return false;
       }else{
 
         $("#sendfile").prop("disabled", true);
-        $('#myModal').modal('show');
+        // $('#myModal').modal('show');
+
+        Swal({
+          title: 'Cargando Documento!',
+          html: 'Espere por favor...',
+          allowOutsideClick: false,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+          
+          }
+        })
+
+
+
+
         e.preventDefault();
 
         var formData = new FormData(this);
@@ -132,21 +141,31 @@
           contentType: false,
           processData: false,
           success: function(result){ 
-            $('#myModal').modal('hide');
+  
+            Swal.close();
 
-            jQuery('.message').html('<i class="nc-icon nc-bell-55"></i> '+result.success);
-
-             
-            jQuery('.mess').show();
+              Swal({
+                title: result.ms,
+                type: result.types,
+              });
 
              $("#sendfile").prop("disabled", false);
              $('#sendFile')[0].reset();
 
           },error: function(jqXHR, text, error){
+            Swal.close();
 
-            alert(jqXHR);alert(text);alert(error);
+            if(error="Payload Too Large"){
+              error="Documento sobrepasa los 10 Megabytes"
+            }
+            Swal({
+              type: 'error',
+              title: 'Oops...',
+              text: error,
+            })
+           // alert(jqXHR);alert(text);alert(error);
             $("#sendfile").prop("disabled", false);
-            $('#myModal').modal('hide');
+           // $('#myModal').modal('hide');
           }
         });
 

@@ -31,7 +31,7 @@
 <div class="container">  
   <div class="row">
     <div class="col-md-12">
-         
+               <!-- <button class="btn btn-success" id="st_hola" onclick="st_hola();">hola</button> -->
       @if(session('notification'))
       <div class="alert alert-success">
         {{session('notification')}}
@@ -39,6 +39,8 @@
       @endif
 
       @if(!count($documents)==0)
+
+
 
         <table class="table">
           <thead class="thead-dark">
@@ -64,17 +66,12 @@
               <td>{{$document->serie}}</td>
               <td>{{$document->folio}}</td>
               <td>
-                    <a class="text-danger" href="{{url($route.$document->url.$document->document)}}">{{url($route.$document->url.$document->document)}}</a>
+                    <a class="text-danger" target="_blank" href="{{url($route.$document->url.$document->document)}}">{{url($route.$document->url.$document->document)}}</a>
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
               <td class="text-success">
-                <form action="{{url('/document/delete/'.$document->id.'')}}" method="post">
-                                 {{csrf_field()}}
-                                 {{method_field('DELETE')}}
-                  <button type="submit" rel="tooltip" title="Eliminar producto de la faz de la Tierra" class="btn btn-danger btn-simple btn-xs">
-                                <i class="fa fa-times"></i>
-                  </button>
-                </form>
+             
+                <button class="btn btn-danger" onclick="st_delete({{$document->id}});"><i class="fa fa-times"></i></button>
               </td>
             </tr>
             @endforeach
@@ -110,4 +107,75 @@
 
 @include('includes.footer')
 @endsection
+
+@section('scripts')
+<script type="text/javascript">
+  
+
+  function st_delete(id){
+    var urlid="{{url('/document/delete/')}}";
+
+
+
+        Swal({
+        title: 'Esta seguro de eliminarlo?',
+        text: "No se podra revertir!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si!'
+      }).then((result2) => {
+        if (result2.value) {
+
+
+    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+    });
+
+   jQuery.ajax({
+      url: urlid,
+      method: 'post',
+      dataType: "JSON",
+      data: {"id":id},
+      success: function(result){ 
+
+        Swal({
+          title: result,
+          type: 'success'
+              }).then(function(){ 
+         location.reload();
+         }
+      );
+
+
+
+       
+      },error: function(jqXHR, text, error){
+
+        Swal({
+          title: jqXHR+' '+text+' '+error,
+          type: 'error'
+        });
+
+
+      }
+    });
+
+
+
+
+
+        }
+      });
+
+
+  }
+
+</script>
+
+@endsection
+
 

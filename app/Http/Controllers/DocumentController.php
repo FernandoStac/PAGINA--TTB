@@ -63,12 +63,22 @@ class DocumentController extends Controller{
          $fileName=$route.'files/'.$namecompanie.'/'.$monthYear.'/'.$nameAndExt;
          $fileFac->save();
 
+          try {
 
-    $user = \App\User::find($user_id);
-    $user->notify(new NewNotification($fileName));
 
-    $companie = \App\companie::find($idcompanie);
-    $companie->notify(new NewNotification($fileName));
+            $user = \App\User::find($user_id);
+            $user->notify(new NewNotification($fileName));
+
+            $companie = \App\companie::find($idcompanie);
+            $companie->notify(new NewNotification($fileName));
+
+            
+          } catch (\Swift_TransportException $e) {
+
+
+            return response()->json(['types'=>"error",'ms'=>'Se cargo el documento pero hay problemas con las notificaciones.',]);
+
+          }
 
     // $user = \App\User::find($companie_id);
     // $user->notify(new NewNotification($fileName));
@@ -84,13 +94,13 @@ class DocumentController extends Controller{
             //       });
 
 
-            return response()->json(['success'=>'Datos Cargados Correctamente, desea cargar mas?']);
+            return response()->json(['types'=>"success",'ms'=>'Documento cargado!']);
 
           
          
     }
 
-      return response()->json(['success'=>'Lo sentimos el archivo no se puedo subir :(']);
+      return response()->json(['types'=>"error",'ms'=>'Lo sentimos el archivo no se puede subir :(']);
   }
 
 
@@ -106,6 +116,25 @@ class DocumentController extends Controller{
     return back()->with(compact("notification"));
   }
 
+
+  public function destroyed(Request $request){
+    $id=$request ->input('id');
+
+    $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado :(";
+    $documentf=document::find($id);
+    if(is_null($documentf)){
+
+       return response()->json("El archivo ya no existia.");
+    }  
+    $fullPath=public_path() .'/'.$documentf->url.$documentf->document;
+    $deleted=File::delete($fullPath); 
+    
+    $documentf->delete();
+    $notification="Documento eliminado :)";
+ 
+    return response()->json($notification);
+      
+  }
 
   public function zip(Request $request){
 
@@ -254,6 +283,12 @@ public function notify(){
 
 
 }
+
+
+  // public function try(){
+  //   $dssd=document::find(1023);
+  //   $dssd->delete();
+  // }
 
 
   // public function emailToCompanieAndAdmin($fileName){
