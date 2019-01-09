@@ -4,7 +4,7 @@
 @section('content')
     <div class="wrapper">
 
-        <div class="page-header section-dark" style="background-image: url('{{ asset('assets/img/antoine-barres.jpg') }}')">
+        <div class="page-header section-dark" style="background-image: url('https://source.unsplash.com/collection/540518/')">
             <div class="filter"></div>
             <div class="content-center">
                 <div class="container">

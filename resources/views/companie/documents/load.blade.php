@@ -35,7 +35,7 @@
 
         <div class="card text-white bg-dark" style="border-radius: 0">
           <div class="card-body">
-            <p class="text-center"><i class="fa fa-file-pdf-o" style="font-size:84px"></i></p>
+            <p class="text-center"><i class="fa fa-file-pdf-o" style="font-size:34px"></i></p>
             
             <form id="sendFile" method="post" enctype="multipart/form-data" class="">
                 {{csrf_field()}}

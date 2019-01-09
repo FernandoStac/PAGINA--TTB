@@ -32,6 +32,10 @@ Auth::routes();
 Route::middleware(['auth','admin'])->group(function () {
 	Route::get('/system/companie', 'CompanieController@index');//show
 	Route::post('/system/companie', 'CompanieController@store');//create
+	Route::post('/system/companie/delete', 'CompanieController@destroy');//delete
+
+
+
 	Route::post('/system/companie/edit/{id}', 'CompanieController@update');//update
 	Route::get('/system/companie/{companie}/documents', 'DocumentController@show')->name('system');
 	Route::get('/system/user.html', 'UserController@index');//show

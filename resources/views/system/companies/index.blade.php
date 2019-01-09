@@ -61,7 +61,8 @@
           <div class="card-body">
             <h5 class="card-title"><i class="fa fa-building"></i>  {{$companie->name}}</h5>
             <p class="card-text">{{$companie->name_short}}</p>
-            <a href="{{url('system/companie/'.$companie->name_short.'/documents')}}" class="btn btn-primary">Ir a la empresa</a>
+            <a href="{{url('system/companie/'.$companie->name_short.'/documents')}}" class="btn btn-primary">Entrar</a>
+            <button class="btn btn-danger" onclick="st_deleteCompany({{$companie->id}});">Eliminar empresa</button>
           </div>
         </div>
       </div>
@@ -124,6 +125,63 @@
 
 <script> 
 
+
+  function st_deleteCompany(id){
+    var id=id;
+    Swal({
+      title: '¿Está seguro de eliminarlo?'+id,
+      text: "Esto no se podra revertir!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Borrar!',
+      cancelButtonText:'Cancelar'
+    }).then((result) => {
+
+      if (result.value) {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        jQuery.ajax({
+          url: "{{url('/system/companie/delete/')}}",
+          method: 'post',
+          dataType: "JSON",
+          data: {"id":id},
+          success: function(result){ 
+
+            Swal({
+              title: result,
+              type: 'success'
+                  }).then(function(){ 
+             location.reload();
+             }
+           );
+
+
+
+           
+          },error: function(jqXHR, text, error){
+
+            Swal({
+              title: jqXHR+' '+text+' '+error,
+              type: 'error'
+            });
+
+
+          }
+        });
+
+
+      }
+
+
+    });
+  }
 
 </script>
 

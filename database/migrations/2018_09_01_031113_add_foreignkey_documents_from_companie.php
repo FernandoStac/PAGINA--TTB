@@ -15,7 +15,7 @@ class AddForeignkeyDocumentsFromCompanie extends Migration
     {
         Schema::table('documents', function (Blueprint $table) {
             $table->unsignedInteger('companie_id')->nullable();
-            $table->foreign('companie_id')->references('id')->on('companies');
+            $table->foreign('companie_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 

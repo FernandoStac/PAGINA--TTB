@@ -28,6 +28,7 @@ class CreateDocumentsTable extends Migration
             $table->text('tipo')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedInteger('parent_Document')->nullable();
             
             $table->timestamps();
         });
