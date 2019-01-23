@@ -10,12 +10,12 @@
 
 @section('content')
 
-<div class="wrapper ">
+<!-- <div class="wrapper ">
     <div class="page-header page-header-xs" data-parallax="true" style="background-image: url('{{ asset('assets/img/fabio-mangione.jpg') }}');">
         <div class="filter"></div>
     </div>              
 </div>
-
+ -->
 
 <nav class="navbar navbar-expand-md fixed-bottom bg-danger">
   <div class="container">
@@ -50,10 +50,13 @@
 <br>
 <br>
 <br>
+<br>
+<br>
 
 
 
-<div class="container">  
+
+<div class="container-fluid">  
   <div class="row">
     <div class="col-md-12">
          
@@ -64,16 +67,16 @@
       @endif
         <div id="datos">  </div>
       @if(!count($documents)==0)
-
+<div class="table-responsive">
       
-        <table class="table" id="myTable">
+        <table class="table table" id="myTable">
           <thead class="thead-dark">
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">Dueño</th>
+              <th scope="col">Proveedor</th>
               <th scope="col">Serie</th>
               <th scope="col">Folio</th>
-              <th scope="col">url</th>
+              <th scope="col">Acciones</th>
               <th scope="col">Fecha</th>
             </tr>
           </thead>
@@ -89,15 +92,23 @@
               <td>{{$document->serie}}</td>
               <td>{{$document->folio}}</td>
               <td>
-                    <a class="text-danger" target="_blank" href="{{url($route.$document->url.$document->document)}}">{{url($route.$document->url.$document->document)}}</a>
+                    <a class="btn btn-danger btn-sm" target="_blank" href="{{url($route.$document->url.$document->document)}}">
+                      <!-- {{url($route.$document->url.$document->document)}}  -->Ver
+                    </a>
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
 
             </tr>
             @endforeach
+
+
+
+
            
           </tbody>
+
         </table>
+        </div>
         <br>
       <br>
         {{$documents->links()}}
@@ -229,37 +240,70 @@
 <script>
   
   $(document).ready( function () {
-    $('#myTable').DataTable({
-       "language": {
-    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-  },
-  "paging":false,
-    ////////////////7
-"columns": [
-    { "searchable": false },
-    null,
-    null,
-    null,
-     { "searchable": false },
-    null
-  ] ,
-   "order": [[ 5, "desc" ]]
-    /////////////7
-    });
-} );
+
+     $('#myTable thead th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="'+title+'" />' );
+            } );
+
+     var table= $('#myTable').DataTable({
+        "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+        },
+        "paging":false,
+
+            ////////////////7
+        // "columns": [
+        //     { "searchable": false },
+        //     null,
+        //     null,
+        //     null,
+        //      { "searchable": false },
+        //     null
+        //   ] ,
+        //    "order": [[ 5, "desc" ]]
+      /////////////7
+      });
+
+
+            // Setup - add a text input to each footer cell
+       
+         
+            // DataTable
+            //var table = $('#myTable').DataTable();
+         
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+         
+                $( 'input', this.header() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+  
+
+
+  } );
+
+
+
   function va(){
     var table = $('#myTable').DataTable();
       
  
-$('#datos').html(
-    table
-        .columns( 0 )
-        .data()
-        .eq( 0 )      // Reduce the 2D array into a 1D array of data
-        .sort()       // Sort data alphabetically
-        .unique()     // Reduce to unique values
-        .join( '<br>' )
-);
+          $('#datos').html(
+              table
+                  .columns( 0 )
+                  .data()
+                  .eq( 0 )      // Reduce the 2D array into a 1D array of data
+                  .sort()       // Sort data alphabetically
+                  .unique()     // Reduce to unique values
+                  .join( '<br>' )
+          );
   }
   //values from the table
   function  idGet(){

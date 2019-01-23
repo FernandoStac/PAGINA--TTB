@@ -32,6 +32,7 @@ class DocumentController extends Controller{
     $date_Actual =$now->format('Y-m-d');
  		$monthYear =$now->format('Y-m');
     $user_id=Auth::user()->id;
+    $user_email=Auth::user()->email;
     $namecompanie=Auth::user()->companie->name_short;
     $idcompanie=Auth::user()->companie_id;
     $this->empresa_mail=Auth::user()->companie->email;
@@ -45,8 +46,8 @@ class DocumentController extends Controller{
     $exten=strtolower($file->getClientOriginalExtension());
     $serie=$request ->input('serie');
     $folio=$request ->input('folio');
-    $nameAndExt=$serie.'_'.$folio.'.'.$exten;
-    $path=public_path() . '/files/'.$namecompanie.'/'.$monthYear;
+    $nameAndExt=$user_email.'_'.$serie.'_'.$folio.'.'.$exten;
+    $path=public_path() . '/files/'.$namecompanie.'/'.$user_email.'/'.$monthYear;
     $fileName=$file->getClientOriginalName();
     $moved=$file->move($path,$nameAndExt);
 
@@ -59,8 +60,8 @@ class DocumentController extends Controller{
          $fileFac->document=$nameAndExt;
          $fileFac->user_id=$user_id;
          $fileFac->companie_id=$idcompanie;
-         $fileFac->url='files/'.$namecompanie.'/'.$monthYear.'/';
-         $fileName=$route.'files/'.$namecompanie.'/'.$monthYear.'/'.$nameAndExt;
+         $fileFac->url='files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/';
+         $fileName=$route.'files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/'.$nameAndExt;
          $fileFac->save();
 
           try {
@@ -69,8 +70,8 @@ class DocumentController extends Controller{
             $user = \App\User::find($user_id);
             $user->notify(new NewNotification($fileName));
 
-            $companie = \App\companie::find($idcompanie);
-            $companie->notify(new NewNotification($fileName));
+            //$companie = \App\companie::find($idcompanie);
+            //$companie->notify(new NewNotification($fileName));
 
             
           } catch (\Swift_TransportException $e) {
@@ -79,19 +80,6 @@ class DocumentController extends Controller{
             return response()->json(['types'=>"error",'ms'=>'Se cargo el documento pero hay problemas con las notificaciones.',]);
 
           }
-
-    // $user = \App\User::find($companie_id);
-    // $user->notify(new NewNotification($fileName));
-
-
-
-
-
-            // Mail::send('system.documents.send',['filename' => $fileName, 'name'=> 'Archivo cargado...'],function($msj){
-            //           $msj->subject('Se cargo un nuevo archivo');
-            //           $msj->to($this->user_mail);
-            //           $msj->cc($this->empresa_mail);
-            //       });
 
 
             return response()->json(['types'=>"success",'ms'=>'Documento cargado!']);
@@ -245,7 +233,7 @@ class DocumentController extends Controller{
 
     if($role>2){
 
-    $documents=document::where("companie_id",$companie->id)
+    $documents=document::where("user_id",$user_id)
               ->orderBy('created_at','desc')
               ->paginate(10);
       return view('companie.documents.index')->with(compact('documents','role','companie','route'));
@@ -253,7 +241,7 @@ class DocumentController extends Controller{
 
       $documents=document::where("companie_id",$companie->id)
               ->orderBy('created_at','desc')
-              ->paginate(500);
+              ->paginate(1000);
 
     return view('system.companies.documents')->with(compact('documents','role','companie','route'));
   }

@@ -26,5 +26,22 @@ class RolesTableSeeder extends Seeder
         	'name'=>'Empresa',
             'type'=>'empresa'
         ]);
+
+            role::create([
+            'name'=>'Administrador 1',
+            'type'=>'admin1'
+        ]);
+
+        role::create([
+            'name'=>'Administrador 2',
+            'type'=>'admin2'
+        ]);
+
+          role::create([
+            'name'=>'Administrador 3',
+            'type'=>'admin3'
+        ]);
+
+
     }
 }

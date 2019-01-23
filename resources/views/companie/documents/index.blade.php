@@ -51,7 +51,7 @@
               <th scope="col">Folio</th>
               <th scope="col">url</th>
               <th scope="col">Fecha</th>
-              <th scope="col">Eliminar</th>
+              <!-- <th scope="col">Eliminar</th> -->
             </tr>
           </thead>
            
@@ -69,10 +69,10 @@
                     <a class="text-danger" target="_blank" href="{{url($route.$document->url.$document->document)}}">{{url($route.$document->url.$document->document)}}</a>
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
-              <td class="text-success">
+              <!-- <td class="text-success"> -->
              
-                <button class="btn btn-danger" onclick="st_delete({{$document->id}});"><i class="fa fa-times"></i></button>
-              </td>
+                <!-- <button class="btn btn-danger" onclick="st_delete({{$document->id}});"><i class="fa fa-times"></i></button> -->
+              <!-- </td> -->
             </tr>
             @endforeach
            

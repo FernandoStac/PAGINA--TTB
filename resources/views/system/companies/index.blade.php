@@ -63,6 +63,7 @@
             <p class="card-text">{{$companie->name_short}}</p>
             <a href="{{url('system/companie/'.$companie->name_short.'/documents')}}" class="btn btn-primary">Entrar</a>
             <button class="btn btn-danger" onclick="st_deleteCompany({{$companie->id}});">Eliminar empresa</button>
+            <!-- <button class="btn btn-danger" onclick="st_options({{$companie->id}});">Opciones</button> -->
           </div>
         </div>
       </div>
@@ -126,10 +127,17 @@
 <script> 
 
 
+ 
+
+  function f(){
+    alert("sd");
+  }
+
+
   function st_deleteCompany(id){
     var id=id;
     Swal({
-      title: '¿Está seguro de eliminarlo?'+id,
+      title: '¿Está seguro de eliminarlo?',
       text: "Esto no se podra revertir!",
       type: 'warning',
       showCancelButton: true,
@@ -139,48 +147,93 @@
       cancelButtonText:'Cancelar'
     }).then((result) => {
 
+
+
+
+
+
+
       if (result.value) {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        jQuery.ajax({
-          url: "{{url('/system/companie/delete/')}}",
-          method: 'post',
-          dataType: "JSON",
-          data: {"id":id},
-          success: function(result){ 
 
             Swal({
-              title: result,
-              type: 'success'
-                  }).then(function(){ 
-             location.reload();
-             }
-           );
+                  title: 'Segunda confirmación!!!',
+  
+                  type: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#d33',
+                  cancelButtonColor: '#3085d6',
+                  confirmButtonText: 'Eliminar por completo!',
+                  cancelButtonText:'Cancelar'
+                }).then((result) => {
+
+                  if (result.value) {
 
 
 
-           
-          },error: function(jqXHR, text, error){
 
-            Swal({
-              title: jqXHR+' '+text+' '+error,
-              type: 'error'
-            });
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+
+                            jQuery.ajax({
+                              url: "{{url('/system/companie/delete/')}}",
+                              method: 'post',
+                              dataType: "JSON",
+                              data: {"id":id},
+                              success: function(result){ 
+
+                                Swal({
+                                  title: result,
+                                  type: 'success'
+                                      }).then(function(){ 
+                                 location.reload();
+                                 }
+                               );
 
 
-          }
-        });
+
+                               
+                              },error: function(jqXHR, text, error){
+
+                                Swal({
+                                  title: jqXHR+' '+text+' '+error,
+                                  type: 'error'
+                                });
+
+
+                              }
+                            });
+
+
+
+
+                  }
+
+
+                });
 
 
       }
 
 
     });
+  }
+
+
+
+   function st_options(id){
+    var id=id;
+
+
+      Swal({
+        title: 'Opciones Disponibles',
+      html:'<button class="btn btn-danger" onclick="f();">Eliminar empresa</button>',
+      confirmButtonText:'Cancelar'
+    });
+
   }
 
 </script>
