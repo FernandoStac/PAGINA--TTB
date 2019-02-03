@@ -17,8 +17,10 @@
 ///////////public routes
 Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@index');
-
-
+/*Route::get('/', function () {
+    return view('welcome');
+});
+*/
 //downloads 
 Route::post('create-zip', 'DocumentController@zip')->name('create-zip');
 Route::post('create_zip_filter', 'DocumentController@zip_filter');
@@ -45,6 +47,36 @@ Route::middleware(['auth','admin'])->group(function () {
 
 	//role,type,access
 	Route::get('/type', 'typeController@index');//update
+
+
+	///////////////////////////////////roles
+	Route::get('/role', 'RoleController@index');//show
+	Route::get('/api/roles', 'RoleController@getRoles');
+	Route::post('/role/edit', 'RoleController@update');
+	Route::post('/role/new', 'RoleController@store');
+	Route::post('/role/delete', 'RoleController@destroy');
+
+	//////////////////////////////
+
+
+
+	/////////////////////////////////menus
+		Route::get('/menu', 'MenuController@index');
+		Route::get('/menu/show', 'MenuController@get');
+		Route::post('/menu/update', 'MenuController@update');
+		Route::post('/menu/new', 'MenuController@store');
+		Route::post('/menu/delete', 'MenuController@destroy');
+		Route::get('/menu/get', 'MenuController@getMenu');
+	////////////////////////////////
+
+	/////////////////////////////////access
+		Route::get('/access', 'AccessController@index');
+		Route::get('/access/show', 'AccessController@get');
+		Route::post('/access/update', 'AccessController@update');
+		Route::post('/access/new', 'AccessController@store');
+		Route::post('/access/delete', 'AccessController@destroy');
+	////////////////////////////////
+
 
 });
 

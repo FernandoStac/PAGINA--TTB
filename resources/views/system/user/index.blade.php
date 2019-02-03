@@ -8,13 +8,13 @@
 @endsection
 
 @section('content')
-
+<!-- 
 <div class="wrapper">
     <div class="page-header page-header-xs" data-parallax="true" style="background-image: url('{{ asset('assets/img/fabio-mangione.jpg') }}');">
         <div class="filter"></div>
     </div>              
 </div>
-
+ -->
 
 
 

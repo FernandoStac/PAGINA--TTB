@@ -14,12 +14,12 @@
     <meta name="viewport" content="width=device-width" />
 
     <!-- Bootstrap core CSS     -->
-
+ <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/> -->
 	<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
 	<link href="{{ asset('assets/css/paper-kit.css?v=2.1.0') }}" rel="stylesheet"/>
 
 	<!--  CSS for Demo Purpose, don't include it in your project     -->
-	<link href="{{ asset('assets/css/demo.css') }}" rel="stylesheet" />
+	
 
     <!--     Fonts and icons     -->
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
@@ -28,13 +28,15 @@
     <link href="{{ asset('assets/sweetalert/sweetalert2.css') }}" rel="stylesheet" />
 
     @yield('css')
-
+    <link href="{{ asset('assets/css/demo.css') }}" rel="stylesheet" />
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md fixed-top  bg-dark" >
-        <div class="container">
-            <div class="navbar-translate">
+    <div class="fix_bar"></div>
+
+    <nav class="navbar navbar-expand-md fixed-top bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-translate">
                 <button class="navbar-toggler navbar-toggler-right navbar-burger" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-bar"></span>
                     <span class="navbar-toggler-bar"></span>
@@ -42,45 +44,26 @@
                 </button>
                 <a class="navbar-brand" href="{{url('/')}}">I-PDF</a>
             </div>
-            <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a href="{{url('/')}}" class="nav-link"></i>Inicio</a>
-                    </li>
+                <div class="collapse navbar-collapse" id="navbarToggler">
+                    
 
-
-
-
-                    @guest
+                    <ul class="navbar-nav ml-auto">
+                        @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                          <!--   <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Registro') }}</a>
-                            </li> -->
-                        @else
-                            @if((Auth::user()->role->id)<=2 )
-                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/system/companie') }}">{{ __('Empresas') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/system/user.html') }}">{{ __('Usuarios') }}</a>
-                            </li>
+                     @else
+                        @foreach ($menus as $key => $item)
+                            @if ($item['parent'] != 0)
+                                @break
                             @endif
-                            
-                            @if((Auth::user()->role->id)==3 )
-                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/companie/'.Auth::user()->companie->name_short.'/document') }}">{{ __('Documentos') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/companie/'.Auth::user()->companie->name_short.'/document/load') }}">{{ __('Cargar documento') }}</a>
-                            </li>
-                           
-                            @endif
+                            @include('partials.menu-item', ['item' => $item])
+                        @endforeach
 
-                            <li class="nav-item dropdown">
+
+                         <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" href="#pk" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <ul class="dropdown-menu dropdown-menu-right dropdown-danger">
                          
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -92,19 +75,18 @@
                               
                                 </ul>
                             </li>
+
+
                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
-                           
-
                         @endguest
+                    </ul>
 
-
-                    
-                </ul>
+                  
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
     @yield('content')
 </body>
