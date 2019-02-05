@@ -63,4 +63,40 @@ class AccessController extends Controller
             return response()->json("1");
         
     }
+
+
+    public function update_to_role(Request $request){
+
+
+         $access=DB::table('accesses')
+         ->where('description_accesses_id',"=",$request->id)
+        ->where("role_id","=",$request->id_role)->first();
+
+        if(!is_null($access)){
+            $this->destroy($access->id);
+                return response()->json("0");
+        }{
+            $this->create($request->id,$request->id_role);
+            return response()->json("1");
+        }
+
+        
+    }
+
+
+    public function create($da,$role){
+         Access::create([
+                'description_accesses_id'=>$da,
+                'role_id'=>$role
+                 ]);
+    }
+
+
+    public function destroy($id){
+        $role=Access::find($id);        
+        $role->delete();
+    }
 }
+
+
+

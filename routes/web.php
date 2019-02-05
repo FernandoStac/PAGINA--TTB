@@ -31,7 +31,7 @@ Auth::routes();
 
 
 ///just admin
-Route::middleware(['auth','admin'])->group(function () {
+Route::middleware(['auth','admin','web'])->group(function () {
 	Route::get('/system/companie', 'CompanieController@index');//show
 	Route::post('/system/companie', 'CompanieController@store');//create
 	Route::post('/system/companie/delete', 'CompanieController@destroy');//delete
@@ -55,6 +55,7 @@ Route::middleware(['auth','admin'])->group(function () {
 	Route::post('/role/edit', 'RoleController@update');
 	Route::post('/role/new', 'RoleController@store');
 	Route::post('/role/delete', 'RoleController@destroy');
+	Route::get('/role/role_access/{id}', 'RoleController@access_view');//show
 
 	//////////////////////////////
 
@@ -75,6 +76,7 @@ Route::middleware(['auth','admin'])->group(function () {
 		Route::post('/access/update', 'AccessController@update');
 		Route::post('/access/new', 'AccessController@store');
 		Route::post('/access/delete', 'AccessController@destroy');
+		Route::post('/access/update_to_role', 'AccessController@update_to_role');
 	////////////////////////////////
 
 

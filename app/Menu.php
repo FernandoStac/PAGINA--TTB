@@ -43,24 +43,43 @@ class Menu extends Model
         }else{
 
 
-        $role_id=Auth::user()->role_id;
+            $role_id=Auth::user()->role_id;
 
-        return $this->select('menus.id as id','menus.name as name','menus.parent as parent','menus.order as order','menus.slug as slug')
-            ->LeftJoin("description_accesses","description_accesses.menu_id",'=',"menus.id")
-            ->LeftJoin("accesses","accesses.description_accesses_id",'=',"description_accesses.id")
-       
-            ->where('accesses.enabled', 1)
-            ->where('accesses.role_id',$role_id)
-            ->orWhere('description_accesses.id',null)
-            ->distinct()
+            if($role_id==1){
+                   return $this->select('menus.id as id','menus.name as name','menus.parent as parent','menus.order as order','menus.slug as slug')
+                ->LeftJoin("description_accesses","description_accesses.menu_id",'=',"menus.id")
+                ->LeftJoin("accesses","accesses.description_accesses_id",'=',"description_accesses.id")
            
-            ->orderby('parent')
-            ->orderby('order')
-            ->orderby('menus.name')
+                ->distinct()
+               
+                ->orderby('parent')
+                ->orderby('order')
+                ->orderby('menus.name')
 
-            ->get()
-            ->toArray();
-                  }
+                ->get()
+                ->toArray();
+                      
+
+            }else{
+                   return $this->select('menus.id as id','menus.name as name','menus.parent as parent','menus.order as order','menus.slug as slug')
+                ->LeftJoin("description_accesses","description_accesses.menu_id",'=',"menus.id")
+                ->LeftJoin("accesses","accesses.description_accesses_id",'=',"description_accesses.id")
+           
+                ->where('accesses.enabled', 1)
+                ->where('accesses.role_id',$role_id)
+                ->orWhere('description_accesses.id',null)
+                ->distinct()
+               
+                ->orderby('parent')
+                ->orderby('order')
+                ->orderby('menus.name')
+
+                ->get()
+                ->toArray();
+            }
+        }
+
+     
     }
 
     public static function menus()

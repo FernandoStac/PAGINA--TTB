@@ -185,7 +185,7 @@
 
       $('#usersTable tbody').on( 'click', '#role_access', function () {
         var data = table.row( $(this).parents('tr') ).data(); 
-        alert(data.id);
+        window.open("{{ url('/role/role_access/') }}/"+data.id+"", '_blank');
       });
 
 

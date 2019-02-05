@@ -11,10 +11,26 @@ class CompanieController extends Controller
 
 
     public function index(){
-        $available_companies=8;
-        $companies= companie::where('status',true)->get();
-        $available=8-($companies->count()) ;
-        return view('system.companies.index')->with(compact('companies','available'));
+        $id=Auth::user()->role_id;
+
+        $accesses=DB::table('description_accesses')
+        ->select(DB::raw('description_accesses.[id] as [id]'))
+        ->Join(DB::raw("(select * from accesses a where a.role_id=".$id.") as a"), 'description_accesses.id', '=', 'a.description_accesses_id')->where("name","=","Ver empresas")
+         ->get();
+
+
+
+         if(count($accesses) or $id==1){
+                $available_companies=8;
+                $companies= companie::where('status',true)->get();
+                $available=8-($companies->count()) ;
+                return view('system.companies.index')->with(compact('companies','available'));
+
+         }else{
+             abort(401);
+         }
+
+
 
     }
 

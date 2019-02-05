@@ -88,4 +88,27 @@ class RoleController extends Controller
 
     }
 
+
+    public function access_view($id){
+
+        $accesses=DB::table('description_accesses')
+        ->select(DB::raw('description_accesses.[id] as [id], description_accesses.[name] as [name] ,iif(a.role_id is null,0,1)estatus ,menus.name as [namemenu]'))
+        ->leftjoin(DB::raw("(select * from accesses a where a.role_id=".$id.") as a"), 'description_accesses.id', '=', 'a.description_accesses_id')
+            ->leftjoin('menus', 'menus.id', '=', 'description_accesses.menu_id')
+         ->get();
+ 
+
+
+        $role= role::where('id',$id)->where("id","<>","1")->first();
+        if(is_null($role)){
+            abort(401);
+        }
+
+        return view('system/roles/role_access')->with(compact('role','accesses'));;
+    }
+
+
+
+    
+
 }
