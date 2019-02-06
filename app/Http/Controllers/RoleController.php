@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\role;
+use App\Access;
 class RoleController extends Controller
 {
 
     public function index(){
-    	return view('system/roles/index');
-    	
+        if(Access::canEnter("Ver roles")){
+            return view('system/roles/index');
+        }
+        abort(401);
     }
 
 
@@ -95,6 +98,7 @@ class RoleController extends Controller
         ->select(DB::raw('description_accesses.[id] as [id], description_accesses.[name] as [name] ,iif(a.role_id is null,0,1)estatus ,menus.name as [namemenu]'))
         ->leftjoin(DB::raw("(select * from accesses a where a.role_id=".$id.") as a"), 'description_accesses.id', '=', 'a.description_accesses_id')
             ->leftjoin('menus', 'menus.id', '=', 'description_accesses.menu_id')
+            ->where('description_accesses.enabled',"true")
          ->get();
  
 

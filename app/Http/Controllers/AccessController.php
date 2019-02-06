@@ -20,9 +20,9 @@ class AccessController extends Controller
      public function get(){
 
  		 $access=DB::table('description_accesses')
-		->select('description_accesses.id as id','description_accesses.name as name','menus.name as nameMenu','menus.id as idmenu')
+		->select('description_accesses.id as id','description_accesses.name as name','menus.name as nameMenu','menus.id as idmenu','description_accesses.enabled as dispo')
 		->leftJoin("menus","menus.id",'=',"description_accesses.menu_id")
-		->where('description_accesses.enabled','1')
+		//->where('description_accesses.enabled','1')
 		 
 		->get();
 		return response()->json(['data'=>$access]);
@@ -31,6 +31,9 @@ class AccessController extends Controller
 
 
     public function store(Request $request){
+        if(is_null($request->name) or $request->name==""){
+                        return response()->json("Los campos estan vacios");
+        }
         $access=DescriptionAccess::where('name',$request->name)->get();
         if(count($access)){
             return response()->json("El permiso ya existe");
@@ -40,6 +43,7 @@ class AccessController extends Controller
                 DescriptionAccess::create([
                 'name'=>$request->name,
                 'menu_id'=>$request->menuvalue,
+                'enabled'=>$request->disponible
                  ]);
   
 
@@ -59,6 +63,7 @@ class AccessController extends Controller
 
             $role->name=$request->name;
             $role->menu_id=$request->menuvalue;
+            $role->enabled=$request->disponible;
             $role->save();
             return response()->json("1");
         

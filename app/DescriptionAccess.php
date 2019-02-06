@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class DescriptionAccess extends Model
 {
      protected $fillable = [
-        'name', 'menu_id'
+        'name', 'menu_id','enabled'
     ];
 }

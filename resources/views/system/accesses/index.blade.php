@@ -47,6 +47,7 @@
               <tr>
                   <th>Nombre</th>
                   <th>Menu</th>
+                  <th>Disponible</th>
                   <th>Acciones</th>
               </tr>
           </thead>
@@ -88,6 +89,14 @@
             <select class="form-control" id="menuvalue" name="menuvalue">options</select>
           </div>
 
+
+               <div class="form-check">
+                    <label for="disponible" class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="disponible" name="disponible" >
+                          Disponble a todos?
+                        <span class="form-check-sign"></span>
+                    </label>
+                </div>
 
 
 
@@ -148,10 +157,19 @@
 
 
       $('#accessTable tbody').on( 'click', '#permiso_update', function () {
+              btnUS.value = "update";
+            btnUS.innerHTML = 'Actualizar';
         var data = table.row( $(this).parents('tr') ).data();
         $("#id").val(data.id);
         $("#name").val(data.name);
-        $("#menuvalue").val(data.idmenu);  
+        $("#menuvalue").val(data.idmenu); 
+
+        if(data.dispo==1){
+          $("#disponible").prop( "checked", true );
+        } else{
+          $("#disponible").prop( "checked", false );
+        }
+
         $('#form_Permiso_options').modal('show');
 
 
@@ -182,8 +200,7 @@
         var request=document.getElementById("sendUpdatePermiso").value;
           if(request=='new'){
             f_newPermiso(formData,table);
-            btnUS.value = "update";
-            btnUS.innerHTML = 'Actualizar';
+      
           }else{
             f_updatePermiso(formData,table);
           }
@@ -213,6 +230,7 @@
           "columns": [
             { data: "name" },
             { data: "nameMenu" },
+            { data: "dispo" },
             { "defaultContent": '<button id="permiso_update" class="btn btn-info" onclick="" >Editar' }
           ],
           "language": {
@@ -225,13 +243,24 @@
        return table;
     }
     function f_updatePermiso(formData,table){
+        var disponible=document.getElementById("disponible").checked;
+      var id=document.getElementById("id").value;
+      var name=document.getElementById("name").value;
+      var menuvalue=document.getElementById("menuvalue").value;
+
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+      
       jQuery.ajax({
         url: "{{ url('/access/update') }}",
         method: 'post',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
+            data: {"id":id,"disponible":disponible,"menuvalue":menuvalue,"name":name},
+
         success: function(result){ 
           if(result!=1){
             Swal({
@@ -273,13 +302,25 @@
 
    
     function f_newPermiso(formData,table){
+
+      var disponible=document.getElementById("disponible").checked;
+      var id=document.getElementById("id").value;
+      var name=document.getElementById("name").value;
+      var menuvalue=document.getElementById("menuvalue").value;
+
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
       jQuery.ajax({
         url: "{{ url('/access/new') }}",
         method: 'post',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
+        dataType: "JSON",
+        data: {"id":id,"disponible":disponible,"menuvalue":menuvalue,"name":name},
+
         success: function(result){ 
           if(result!=1){
             Swal({
