@@ -22,7 +22,7 @@ class CompanieController extends Controller
                 return view('system.companies.index')->with(compact('companies','available'));
 
          }else{
-             abort(401);
+             abort(401,"Lo sentimos, no esta autorizado a ver las empresas");
          }
 
 

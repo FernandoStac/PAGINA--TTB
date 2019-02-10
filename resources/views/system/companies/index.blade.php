@@ -20,7 +20,7 @@
       <a class="navbar-brand" href="#"><i class="fa fa-building"></i> Empresas</a>
       <div class="collapse navbar-collapse" id="navbar-primary">
         <ul class="navbar-nav ml-auto">
-          @if($available==8)
+          @if($available==8 and App\Access::canEnter("Crear empresas"))
           <li class="nav-item">
             <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-building"></i> Alta empresa</a>
           </li>
@@ -62,8 +62,10 @@
             <h5 class="card-title"><i class="fa fa-building"></i>  {{$companie->name}}</h5>
             <p class="card-text">{{$companie->name_short}}</p>
             <a href="{{url('system/companie/'.$companie->name_short.'/documents')}}" class="btn btn-primary">Entrar</a>
-            <button class="btn btn-danger" onclick="st_deleteCompany({{$companie->id}});">Eliminar empresa</button>
-            <!-- <button class="btn btn-danger" onclick="st_options({{$companie->id}});">Opciones</button> -->
+            @if(App\Access::canEnter("Eliminar empresas"))
+               <button class="btn btn-danger" onclick="st_deleteCompany({{$companie->id}});">Eliminar empresa</button>
+            @endif
+
           </div>
         </div>
       </div>

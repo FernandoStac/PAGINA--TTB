@@ -40,9 +40,12 @@
             </form>
           </li>
           @endif
+
+          @if(App\Access::canEnter("Editar empresas"))
           <li class="nav-item">
             <a class="nav-link" href="#" data-toggle="modal" data-target="#empresaModal"><i class="fa fa-building"></i> Editar empresa</a>
           </li>
+          @endif
         </ul>
       </div>
   </div>
@@ -67,7 +70,7 @@
       @if(!count($documents)==0 and !is_null($documents))
 <div class="table-responsive">
       
-        <table class="table table" id="myTable">
+        <table class="table" id="myTable">
           <thead class="thead-dark">
             <tr>
               <th scope="col">ID</th>

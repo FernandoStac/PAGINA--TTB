@@ -14,7 +14,7 @@ class RoleController extends Controller
         if(Access::canEnter("Ver roles")){
             return view('system/roles/index');
         }
-        abort(401);
+        abort(401,"Lo sentimos, no tiene permisos para ver los Roles");
     }
 
 
@@ -30,16 +30,21 @@ class RoleController extends Controller
 
     //update a role
     public function update(Request $request){
-		if(is_null($request->role2) or $request->role2==""){
-			            return response()->json("Los campos estan vacios");
-		}
 
-        $role=role::find($request->idrole);
 
-            $role->name=$request->role2;
-            $role->type=$request->tipo2;
-            $role->save();
-            return response()->json("1");
+        if(Access::canEnter("Editar Rol")){
+    		if(is_null($request->role2) or $request->role2==""){
+    			            return response()->json("Los campos estan vacios");
+    		}
+
+            $role=role::find($request->idrole);
+
+                $role->name=$request->role2;
+                $role->type=$request->tipo2;
+                $role->save();
+                return response()->json("1");
+        }
+        return response()->json("Sin permisos para editar un Rol");
         
     }
 
@@ -67,49 +72,59 @@ class RoleController extends Controller
 
     public function destroy(Request $request){
 
-    	try {
+        if(Access::canEnter("Eliminar Rol")){
 
-    		         $id=$request ->input('id');
+            	try {
 
-        $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado :(";
-        $role=role::find($id);
-        if(is_null($role)){
+            		         $id=$request ->input('id');
 
-           return response()->json("La empresa ya no existia.");
-        }  
+                $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado :(";
+                $role=role::find($id);
+                if(is_null($role)){
 
-        
-        $role->delete();
-        $notification="El rol fue eliminado fue eliminada";
-     
-         return response()->json($notification);
-    		
-    	} catch (\Illuminate\Database\QueryException $e) {
-    		return response()->json($e->errorInfo[0]);
-    	}
+                   return response()->json("El ya no existia.");
+                }  
 
+                
+                $role->delete();
+                $notification="El rol fue eliminado fue eliminada";
+             
+                 return response()->json($notification);
+            		
+            	} catch (\Illuminate\Database\QueryException $e) {
+            		return response()->json($e->errorInfo[0]);
+            	}
+        }
+
+        return response()->json("Sin permisos para eliminar :)");
 
     }
 
 
     public function access_view($id){
 
-        $accesses=DB::table('description_accesses')
-        ->select(DB::raw('description_accesses.[id] as [id], description_accesses.[name] as [name] ,iif(a.role_id is null,0,1)estatus ,menus.name as [namemenu]'))
-        ->leftjoin(DB::raw("(select * from accesses a where a.role_id=".$id.") as a"), 'description_accesses.id', '=', 'a.description_accesses_id')
-            ->leftjoin('menus', 'menus.id', '=', 'description_accesses.menu_id')
-            ->where('description_accesses.enabled',"true")
-            ->orderBy('menus.name')
-         ->get();
- 
+        if(Access::canEnter("Permisos del Role")){
+
+            $accesses=DB::table('description_accesses')
+            ->select(DB::raw('description_accesses.[id] as [id], description_accesses.[name] as [name] ,iif(a.role_id is null,0,1)estatus ,menus.name as [namemenu]'))
+            ->leftjoin(DB::raw("(select * from accesses a where a.role_id=".$id.") as a"), 'description_accesses.id', '=', 'a.description_accesses_id')
+                ->leftjoin('menus', 'menus.id', '=', 'description_accesses.menu_id')
+                ->where('description_accesses.enabled',"true")
+                ->orderBy('menus.name')
+             ->get();
+     
 
 
-        $role= role::where('id',$id)->where("id","<>","1")->first();
-        if(is_null($role)){
-            abort(401);
+            $role= role::where('id',$id)->where("id","<>","1")->first();
+            if(is_null($role)){
+                abort(401);
+            }
+
+            return view('system/roles/role_access')->with(compact('role','accesses'));;
         }
 
-        return view('system/roles/role_access')->with(compact('role','accesses'));;
+             abort(401,"Lo sentimos, no tiene permisos para dar permisos al role");
+
     }
 
 

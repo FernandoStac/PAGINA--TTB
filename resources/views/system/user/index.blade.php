@@ -28,10 +28,11 @@
       <a class="navbar-brand" href="#"><i class="fa fa-building"></i> Administración de usuario</a>
       <div class="collapse navbar-collapse" id="navbar-primary">
         <ul class="navbar-nav ml-auto">
-
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-building"></i> Nuevo usuario</a>
-          </li>
+           @if(App\Access::canEnter("Crear usuarios"))
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-building"></i> Nuevo usuario</a>
+            </li>
+          @endif
  
         </ul>
       </div>
@@ -89,7 +90,7 @@
           <div class="form-group">
             <label for="rol">Tipo de usuario</label>
             <select class="form-control" name="rol" id="rol" required="" onchange="showCompanie(this.value)">
-            <option value="">Selecione un rol</option>
+            <option id="r2" value="">Selecione un rol</option>
                 @foreach($roles as $rol)
             <option value="{{$rol->id}}">{{$rol->name}}</option>
                 @endforeach
@@ -290,12 +291,16 @@
             processData: false,
             success: function(result){ 
               if(result=="rpt"){
-                jQuery('.message').html('El correo debe ser único, ingrese otro');
-                jQuery('.mess').show();
+                  Swal({
+                    title: 'El correo debe ser único, ingrese otro',
+                    type: 'error'
+                  });
               }else{
                 $('#myModal2').modal('hide');
-                jQuery('.mess').hide();
-                table.ajax.reload();
+                Swal({
+                  title: result,
+                  type: 'success'
+                });
               }
 
               $("#sendUpdateUser").prop("disabled", false);
@@ -370,8 +375,11 @@
 
 
       function showCompanie(){
-        var rol=$("#rol").val();
-        if(rol==3){
+   
+        var posicion=document.getElementById("rol").options.selectedIndex; 
+
+        var rol=(document.getElementById("rol").options[posicion].text); //valor
+        if(rol=="Proveedor"){
           $("#fieldCompanie").show();
           $("#companie").prop("required", true);
         }else{

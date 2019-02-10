@@ -15,9 +15,9 @@ class CompanieMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->role->type="provee"){
+        if(auth()->user()->role->type=="provee"){
             return $next($request);  
         }
-        abort(404);
+        abort(401,"Sin permisos, sección solo para los proveedores");
     }
 }

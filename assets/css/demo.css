@@ -1165,6 +1165,9 @@
 display: none;
 background: red;
 }
+#documentsProvee_filter{
+  display: none;  
+}
 
 
 
@@ -1210,4 +1213,12 @@ background: red;
 .alert-orange {
   color:white;
   background-color: #E9573F;
+}
+
+#documentsProvee{
+    width: 100% !important;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 4px 10px;
 }

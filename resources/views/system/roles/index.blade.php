@@ -22,11 +22,11 @@
       <a class="navbar-brand" href="#"><i class="fa fa-building"></i> Administración de roles</a>
       <div class="collapse navbar-collapse" id="navbar-primary">
         <ul class="navbar-nav ml-auto">
-
+          @if(App\Access::canEnter("Crear rol"))
           <li class="nav-item">
             <button class="btn btn-link" onclick="st_newRole();"><i class="fa fa-building"></i> Nuevo Role</button>
           </li>
- 
+          @endif
         </ul>
       </div>
   </div>
@@ -43,7 +43,7 @@
   <div class="row">
     <div class="col-md-12">
         <table id="usersTable" class="display table">
-          <td>
+          
             <thead class="thead-dark">
               <tr>
                   <th >Role</th>
@@ -51,7 +51,7 @@
                   <th>Acciones</th>
               </tr>
           </thead>
-          </td>
+        
 
         </table>
         <br>
@@ -148,7 +148,7 @@
             }
         } );
 
-      } );
+      });
 
       var table= $('#usersTable').DataTable( {
           "ajax": '{{url("/api/roles")}}',
@@ -185,7 +185,8 @@
 
       $('#usersTable tbody').on( 'click', '#role_access', function () {
         var data = table.row( $(this).parents('tr') ).data(); 
-        window.open("{{ url('/role/role_access/') }}/"+data.id+"", '_blank');
+        window.open("{{ url('/role/role_access/') }}/"+data.id+"");
+        //window.open("{{ url('/role/role_access/') }}/"+data.id+"", '_blank');
       });
 
 

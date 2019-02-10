@@ -40,21 +40,21 @@ class DatabaseSeeder extends Seeder
             $this->command->info("LA CONFUGURACION DEL CORREO FUE EXITOSA");
             $this->command->info("***************************************************************");
 
-        // }else{
-        //     $this->command->info("***************************************************************");
-        //     $this->command->info("*******************************MENSAJE DE ERROR ULTRACATASTROFICO********************************");
-        //     $this->command->info("No se completaron las migraciones");
-        //     $this->command->info("*El correo no esta bien configurado:");
-        //     $this->command->info("      Configure correctamente el archivo .env");
-        //     $this->command->info("          MAIL_DRIVER=smtp");
-        //     $this->command->info("          MAIL_HOST=?????????");
-        //     $this->command->info("          MAIL_PORT=????");
-        //     $this->command->info("          MAIL_USERNAME=???");
-        //     $this->command->info("          MAIL_PASSWORD=?????????????");
-        //     $this->command->info("          MAIL_ENCRYPTION=tls");
-        //     $this->command->info("");
-        //     $this->command->info("VERIFIQUE LA CONFIGURACION DEL CORREO Y VUELVA A EJECUTAR EL MISMO COMANDO");
-        //     $this->command->info("****************************************************************************************************");
+        }else{
+            $this->command->info("***************************************************************");
+            $this->command->info("*******************************MENSAJE DE ERROR ULTRACATASTROFICO********************************");
+            $this->command->info("No se completaron las migraciones");
+            $this->command->info("*El correo no esta bien configurado:");
+            $this->command->info("      Configure correctamente el archivo .env");
+            $this->command->info("          MAIL_DRIVER=smtp");
+            $this->command->info("          MAIL_HOST=?????????");
+            $this->command->info("          MAIL_PORT=????");
+            $this->command->info("          MAIL_USERNAME=???");
+            $this->command->info("          MAIL_PASSWORD=?????????????");
+            $this->command->info("          MAIL_ENCRYPTION=tls");
+            $this->command->info("");
+            $this->command->info("VERIFIQUE LA CONFIGURACION DEL CORREO Y VUELVA A EJECUTAR EL MISMO COMANDO");
+            $this->command->info("****************************************************************************************************");
 
          }
      

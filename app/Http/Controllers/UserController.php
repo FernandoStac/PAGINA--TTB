@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\role;
 use App\companie;
 use App\User;
+use App\Access;
 
 class UserController extends Controller
 {	
@@ -16,13 +17,17 @@ class UserController extends Controller
     //show users
     public function index(){
 
-    	$roles=role::select('id','name')->where('id', '>',1)->get();
-    	$companies=companie::select('id','name')->where('status',true)->get();
+        if(Access::canEnter("Ver usuarios")){
 
- 
-    	//dd(response()->json(['data'=>$users]));
+        	$roles=role::select('id','name')->where('id', '>',1)->get();
+        	$companies=companie::select('id','name')->where('status',true)->get();
 
-    	return view('system/user/index')->with(compact('roles','companies'));
+     
+        	//dd(response()->json(['data'=>$users]));
+
+        	return view('system/user/index')->with(compact('roles','companies'));
+        }
+        abort(401,"Lo sentimos, no tiene permisos para ver los usuarios");
     	
     }
 
@@ -46,7 +51,11 @@ class UserController extends Controller
             return response()->json("rpt");
         }else{
 
-            if($request->rol==2){
+            $role=role::where('id',$request->rol)->first();
+
+    
+
+            if($role->type=="admin"){
                 User::create([
                     'name'=>$request->name,
                     'email'=>$request->email,
@@ -54,7 +63,7 @@ class UserController extends Controller
                     'role_id'=>$request->rol,
                 ]);
 
-            }else{
+            }elseif($role->type=="provee"){
                 User::create([
                 'name'=>$request->name,
                 'email'=>$request->email,
@@ -73,17 +82,21 @@ class UserController extends Controller
 
     //update a user
     public function update(Request $request){
-        $user=User::find($request->iduser);
-        $email=User::where('email',$request->email2)
-                    ->where('id',"!=",$user->id)
-                    ->get();
-        if(count($email)){
-            return response()->json("rpt");
-        }else{
-            $user->email=$request->email2;
-            $user->name=$request->name2;
-            $user->save();
-             return response()->json("Guardado con éxito");
+
+        if(Access::canEnter("Editar usuarios")){
+            $user=User::find($request->iduser);
+            $email=User::where('email',$request->email2)
+                        ->where('id',"!=",$user->id)
+                        ->get();
+            if(count($email)){
+                return response()->json("rpt");
+            }else{
+                $user->email=$request->email2;
+                $user->name=$request->name2;
+                $user->save();
+                 return response()->json("Guardado con éxito");
+            }
         }
+        return response()->json("Sin permisos para actualizar un usuario");
     }
 }

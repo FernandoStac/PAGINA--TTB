@@ -3,11 +3,7 @@
 
 @section('content')
 
-<div class="wrapper">
-    <div class="page-header page-header-xs" data-parallax="true" style="background-image: url('{{ asset('assets/img/fabio-mangione.jpg') }}');">
-        <div class="filter"></div>
-    </div>              
-</div>
+
 
 <nav class="navbar navbar-expand-md bg-danger">
   <div class="container">
@@ -60,6 +56,10 @@
 
           </div>
         </div>
+
+        <p class="text-danger">*El folio es un dato necesario</p>
+        <p class="text-danger">*Archivo máximo de 10 megas</p>
+        <p class="text-danger">*Solo archivos en formato .pdf, .zip y .rar</p>
         
       </div>
       <div class="col md-3"></div>

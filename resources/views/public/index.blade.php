@@ -33,10 +33,14 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
-                            <h2 class="title">Carga de archivos</h2><br/>
+                            <h2 class="title">¡Administración de documentos!</h2><br/>
                             <p class="description">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus corporis ipsam, quia et impedit nemo, id repudiandae, nisi reprehenderit magnam sapiente nobis a deleniti exercitationem temporibus. Cumque nulla voluptate at!</span><span>Rerum magnam error voluptatem, expedita itaque ullam sed tenetur, eligendi veritatis quis perspiciatis laudantium quas consectetur quisquam cupiditate inventore vero ad doloribus similique provident, sint quibusdam hic aperiam officiis eaque!</span>
-                            </p><br/>
+                                <span>¡Cargue documentos!</span>
+                            </p><p class="description">
+                                <span>¡Verifique el estatus!</span>
+                            </p><p class="description">
+                                <span>¡Valide sus documentos en tres pasos!</span>
+                            </p>
                          
                         </div>
 

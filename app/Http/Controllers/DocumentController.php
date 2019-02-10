@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\document;
 use App\companie;
 use App\configManager;
@@ -230,10 +231,9 @@ class DocumentController extends Controller{
    
 
     if($type=="provee"){
-//$companie=Auth::user()->companie->name_short;
-    $documents=document::where("user_id",$user_id)
-              ->orderBy('created_at','desc')
-              ->paginate(10);
+      $documents=document::select(DB::raw("id ,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 or v_1 is null) and (v_2=1 or v_2 is null) and (v_3 is null) ,'En proceso','Rechazado')) as estatus ,document, url, created_at, serie, folio,observ_1,observ_2,observ_3"))->where("user_id",$user_id)
+        ->orderBy('created_at','desc')
+        ->paginate(1000);
       return view('companie.documents.index')->with(compact('documents','role','companie','route'));
     }else{
        if(is_null($companie) || empty($companie)){
@@ -263,11 +263,8 @@ class DocumentController extends Controller{
         $evaluacion_tipo=3;
         $evaluacion="Proceso 3";
       }elseif(Access::canEnter("Evaluador Maestro")){
-         // $documents=document::where("companie_id",$companie->id)->whereRaw('((v_1=1 or v_1 is null) and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null))')
-         //          ->orderBy('created_at','desc')
-         //          ->paginate(1000);
 
-         $documents=document::where("companie_id",$companie->id)//->whereNull("id_v1")->whereNull("id_v2")->whereNull("id_v3")
+         $documents=document::where("companie_id",$companie->id)
                   ->orderBy('created_at','desc')
                   ->paginate(1000);
           $evaluacion_tipo=777;
