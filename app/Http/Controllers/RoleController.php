@@ -99,6 +99,7 @@ class RoleController extends Controller
         ->leftjoin(DB::raw("(select * from accesses a where a.role_id=".$id.") as a"), 'description_accesses.id', '=', 'a.description_accesses_id')
             ->leftjoin('menus', 'menus.id', '=', 'description_accesses.menu_id')
             ->where('description_accesses.enabled',"true")
+            ->orderBy('menus.name')
          ->get();
  
 

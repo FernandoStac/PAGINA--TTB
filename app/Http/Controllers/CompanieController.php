@@ -53,20 +53,31 @@ class CompanieController extends Controller
 
 
     public function destroy(Request $request){
-         $id=$request ->input('id');
 
-        $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado :(";
-        $companrs=companie::find($id);
-        if(is_null($companrs)){
 
-           return response()->json("La empresa ya no existia.");
-        }  
+        if(Access::canEnter("Eliminar empresas")){
+                   $id=$request ->input('id');
 
-        
-        $companrs->delete();
-        $notification="La empresa fue eliminada";
-     
-         return response()->json($notification);
+                    $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado :(";
+                    $companrs=companie::find($id);
+                    if(is_null($companrs)){
+
+                       return response()->json("La empresa ya no existia.");
+                    }  
+
+                    
+                    $companrs->delete();
+                    $notification="La empresa fue eliminada";
+                 
+                     return response()->json($notification);
+
+         }else{
+             return response()->json("Lo sentimos pero no puede eliminar empresas :)");
+         }
+
+
+
+      
 
     }
 

@@ -13,11 +13,12 @@ Use Session;
 use Redirect;
 use File;
 use ZipArchive;
+use App\Access;
 
 
 class DocumentController extends Controller{
   
-  public function index($companieName){
+  public function index(){
     
     return view('companie.documents.load');
   }
@@ -224,27 +225,73 @@ class DocumentController extends Controller{
     $route=$this->route_url();
     $companie=companie::where("name_short",$companieName)->first();
     $user_id=Auth::user()->id;
-    $role=Auth::user()->role_id;
+    $type=Auth::user()->role->type;
 
-    if(is_null($companie) || empty($companie)){
-        abort(404);
-    }
+   
 
-
-    if($role>2){
-
+    if($type=="provee"){
+//$companie=Auth::user()->companie->name_short;
     $documents=document::where("user_id",$user_id)
               ->orderBy('created_at','desc')
               ->paginate(10);
       return view('companie.documents.index')->with(compact('documents','role','companie','route'));
+    }else{
+       if(is_null($companie) || empty($companie)){
+              abort(404);
+          }
+
+     
+
+      if(Access::canEnter("Evaluador 1")){
+        $documents=document::where("companie_id",$companie->id)//->whereNull("id_v1")->whereNull("id_v2")->whereNull("id_v3")
+                  ->orderBy('created_at','desc')
+                  ->paginate(1000);
+        $evaluacion_tipo=1;
+        $evaluacion="Proceso 1";
+      }elseif(Access::canEnter("Evaluador 2")){
+         $documents=document::where("companie_id",$companie->id)//->whereNotNull("id_v1")->whereNull("id_v2")->whereNull("id_v3")->where("v_1",1)
+
+        ->whereRaw('(v_1=1) or (v_2=1) or (v_3=1 or v_3=0) or (v_1=1 and v_2=1 and v_3=1)')
+                  ->orderBy('created_at','desc')
+                  ->paginate(1000);
+        $evaluacion_tipo=2;
+        $evaluacion="Proceso 2";
+      }elseif(Access::canEnter("Evaluador 3")){
+         $documents=document::where("companie_id",$companie->id)->whereNotNull("id_v1")->whereNotNull("id_v2")->whereNull("id_v3")->where("v_1",1)->where("v_2",1)
+                  ->orderBy('created_at','desc')
+                  ->paginate(1000);
+        $evaluacion_tipo=3;
+        $evaluacion="Proceso 3";
+      }elseif(Access::canEnter("Evaluador Maestro")){
+         // $documents=document::where("companie_id",$companie->id)->whereRaw('((v_1=1 or v_1 is null) and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null))')
+         //          ->orderBy('created_at','desc')
+         //          ->paginate(1000);
+
+         $documents=document::where("companie_id",$companie->id)//->whereNull("id_v1")->whereNull("id_v2")->whereNull("id_v3")
+                  ->orderBy('created_at','desc')
+                  ->paginate(1000);
+          $evaluacion_tipo=777;
+          $evaluacion="Evaluación completa";
+      }else{
+        $documents=document::where("companie_id",$companie->id)
+                  ->orderBy('created_at','desc')
+                  ->paginate(1000);
+          $evaluacion_tipo=null;
+          $evaluacion="";
+      }
+
+        return view('system.companies.documents')->with(compact('documents','role','companie','route','evaluacion_tipo','evaluacion'));
+
     }
 
-      $documents=document::where("companie_id",$companie->id)
-              ->orderBy('created_at','desc')
-              ->paginate(1000);
-
-    return view('system.companies.documents')->with(compact('documents','role','companie','route'));
   }
+
+
+
+
+
+
+
 
 
   public function sendemail(){
@@ -262,39 +309,60 @@ class DocumentController extends Controller{
   }
 
 
-public function notify(){
-    $ruta="holamundo";
-    $user = \App\companie::find(1);
-    $user->notify(new NewNotification($ruta));
+  public function notify(){
+      $ruta="holamundo";
+      $user = \App\companie::find(1);
+      $user->notify(new NewNotification($ruta));
 
 
 
 
-}
+  }
 
 
-  // public function try(){
-  //   $dssd=document::find(1023);
-  //   $dssd->delete();
-  // }
+  public function document_validate(Request $request){
+      $document=document::find($request->id);
+      $user_id=Auth::user()->id;
+    if($request->tipo_evaluador==1){
+      $document->id_v1=$user_id;
+      $document->v_1=$request->validation_document;
+      $document->observ_1=$request->validation_document_ob;
+
+    }elseif($request->tipo_evaluador==2){
+      $document->id_v2=$user_id;
+      $document->v_2=$request->validation_document;
+      $document->observ_2=$request->validation_document_ob;
+
+    }elseif($request->tipo_evaluador==3){
+      $document->id_v3=$user_id;
+      $document->v_3=$request->validation_document;
+      $document->observ_3=$request->validation_document_ob;
+
+    }elseif($request->tipo_evaluador==777){
+      $document->id_v1=$user_id;
+      $document->v_1=$request->validation_document;
+      $document->observ_1=$request->validation_document_ob;
+
+      $document->id_v2=$user_id;
+      $document->v_2=$request->validation_document;
+      $document->observ_2=$request->validation_document_ob;
+
+       $document->id_v3=$user_id;
+      $document->v_3=$request->validation_document;
+      $document->observ_3=$request->validation_document_ob;
+
+    }else{
+       return response()->json(['types'=>"supererror",'ms'=>'Lo sentimos pero usted no tiene permisos para evaluar']);
+    }
+
+    $document->save();
+    return response()->json(['types'=>"success",'ms'=>'Documento evaluado!']);
+  
 
 
-  // public function emailToCompanieAndAdmin($fileName){
-  //   try {
+  }
 
-  //     dd(Mail::send('system.documents.send',['filename' => $fileName, 'name'=> 'Archivo cargado...'],function($msj){
-  //               $msj->subject('Se cargo un nuevo archivo');
-  //               $msj->to($this->user_mail);
-  //               $msj->cc($this->empresa_mail);
-  //           }));
 
-  //     return true();
-      
-  //   } catch (\Exception $e) {
-  //     return false();
-  //   }
-     
-     
-  // }
+
 
 }

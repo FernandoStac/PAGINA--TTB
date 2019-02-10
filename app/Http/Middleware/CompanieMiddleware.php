@@ -15,7 +15,7 @@ class CompanieMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->role_id>2){
+        if(auth()->user()->role->type="provee"){
             return $next($request);  
         }
         abort(404);

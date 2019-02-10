@@ -47,26 +47,24 @@
       </div>
   </div>
 </nav>
-<br>
-<br>
-<br>
-<br>
-<br>
 
-
+  <form>
+    <input type="hidden" name="tipo_evaluador" id="tipo_evaluador" value="{{$evaluacion_tipo}}">
+  </form>
 
 
 <div class="container-fluid">  
   <div class="row">
     <div class="col-md-12">
-         
+      <h2 class="text-info text-uppercase ">{{$companie->name}} <span class="small">{{$evaluacion}}</span></h2>
+      <br>
       @if(session('notification'))
       <div class="alert alert-success">
         {{session('notification')}}
       </div>
       @endif
         <div id="datos">  </div>
-      @if(!count($documents)==0)
+      @if(!count($documents)==0 and !is_null($documents))
 <div class="table-responsive">
       
         <table class="table table" id="myTable">
@@ -76,6 +74,8 @@
               <th scope="col">Proveedor</th>
               <th scope="col">Serie</th>
               <th scope="col">Folio</th>
+
+              <th scope="col">Estatus</th>
               <th scope="col">Acciones</th>
               <th scope="col">Fecha</th>
             </tr>
@@ -90,11 +90,67 @@
               <th class="idValues" scope="row">{{$document->id}}</th>
               <td>{{$document->name_user}}</td>
               <td>{{$document->serie}}</td>
+         
               <td>{{$document->folio}}</td>
               <td>
-                    <a class="btn btn-danger btn-sm" target="_blank" href="{{url($route.$document->url.$document->document)}}">
-                      <!-- {{url($route.$document->url.$document->document)}}  -->Ver
-                    </a>
+                @if($evaluacion_tipo==1 or $evaluacion_tipo==777) 
+                      @if(( !is_null($document->v_1) and $document->v_1==false) or  ( !is_null($document->v_2) and $document->v_2==false) or (!is_null($document->v_3) and $document->v_3==false))
+                      Rechazado 
+                      @elseif($document->v_1==1 and $document->v_2==1 and $document->v_3==1)
+                      Aceptado
+                      @elseif(($document->v_1==1 and is_null($document->v_2)) or ($document->v_1==1 and $document->v_2==1) )
+                        En proceso
+                      @else
+                        Revisar
+                       @endif
+                 @elseif($evaluacion_tipo==2)
+                    @if(( !is_null($document->v_2) and $document->v_2==false) or (!is_null($document->v_3) and $document->v_3==false))
+                      Rechazado 
+                      @elseif($document->v_1==1 and $document->v_2==1 and $document->v_3==1)
+                      Aceptado
+                      @elseif(($document->v_2==1 and is_null($document->v_3)) )
+                        En proceso
+                      @else
+                        Revisar
+                       @endif
+
+
+                 @endif
+
+
+              </td>
+              <td>
+                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver
+                    </a> 
+                    @if($evaluacion_tipo==1)
+
+
+                                @if(( is_null($document->v_1) ))
+
+                       
+                          <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
+                              Validar
+                            </a>
+                         @endif
+
+                  @elseif($evaluacion_tipo==2)
+                                @if(( is_null($document->v_2) ))
+
+                         
+                            <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
+                                Validar
+                              </a>
+                           @endif
+                   @elseif($evaluacion_tipo==3)
+                     <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
+                                Validar
+                              </a>
+                  @elseif($evaluacion_tipo==777)
+                     <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
+                                Validar
+                              </a>
+                 @endif
+                    
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
 
@@ -121,11 +177,7 @@
       <br>
       <br>
       <br>
-      <div class="alert alert-info">
-          <div class="container">
-              <span>No cuenta con ningun documento cargado :) </span>
-          </div>
-      </div>
+      <h3 class="text-info">Sin documentos a evaluar :)</h3>
       <br>
       <br>
       <br>
@@ -238,61 +290,83 @@
  <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
 <script>
-  
+   var table;
   $(document).ready( function () {
 
      $('#myTable thead th').each( function () {
                 var title = $(this).text();
-                $(this).html( '<input type="text" placeholder="'+title+'" />' );
-            } );
+                $(this).html( '<input type="text" style="width:100px" placeholder="'+title+'" />' );
+      } );
 
-     var table= $('#myTable').DataTable({
+      table= $('#myTable').DataTable({
         "language": {
         "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
         },
         "paging":false,
+        rowCallback: function(row, data, index){
+                if(data[4] == "Rechazado"){
+                    //$(row).css('background-color', 'blue');
+                    $( row ).addClass( "bg-danger text-light");
+                    $('td a', row).addClass('text-light');
+                    $('td a', row).removeClass('text-success text-info');
+                }
 
-            ////////////////7
-        // "columns": [
-        //     { "searchable": false },
-        //     null,
-        //     null,
-        //     null,
-        //      { "searchable": false },
-        //     null
-        //   ] ,
-        //    "order": [[ 5, "desc" ]]
-      /////////////7
+                if(data[4] == "Aceptado"){
+                    //$(row).css('background-color', 'blue');
+                    $( row ).addClass( "bg-success text-light");
+                    $('td a', row).addClass('text-light');
+                    $('td a', row).removeClass('text-success text-info');
+                }
+
+                if(data[4] == "En proceso"){
+                    //$(row).css('background-color', 'blue');
+                    $( row ).addClass( "bg-warning text-dark");
+                    $('td a', row).addClass('text-light');
+                    $('td a', row).removeClass('text-success text-info');
+                }
+            }
       });
 
-
-            // Setup - add a text input to each footer cell
-       
-         
-            // DataTable
-            //var table = $('#myTable').DataTable();
-         
-            // Apply the search
-            table.columns().every( function () {
-                var that = this;
-         
-                $( 'input', this.header() ).on( 'keyup change', function () {
-                    if ( that.search() !== this.value ) {
-                        that
-                            .search( this.value )
-                            .draw();
-                    }
-                } );
-            } );
-  
+    table.columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.header() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
 
 
-  } );
+
+
+
+
+
+    $('#myTable tbody').on( 'click', '.document_validate', function () {
+
+
+
+       var colu= $(this);//.closest('tr').remove();
+       //let id=($(this).closest('tr').find(".idValues").text());
+
+
+        // table
+        // .row( colu.parents('tr') )
+        // .remove()
+        // .draw();
+
+       st_validar(colu);
+      });
+
+  });
 
 
 
   function va(){
-    var table = $('#myTable').DataTable();
+    // table = $('#myTable').DataTable();
       
  
           $('#datos').html(
@@ -335,6 +409,103 @@
               alert('Error al obtener el archivo');// solo ingresa a esta parte
            }
        });
+  }
+
+
+
+
+
+  function st_validar(colu){
+    var id=colu.closest('tr').find(".idValues").text();
+   // var data = table.row( $(this).parents('tr') ).data(); 
+        //alert(data.id);
+    Swal.fire({
+      title: 'Validar documento '+id,
+      text: "You won't be able to revert this!",
+      html: '<br>'+
+            '<form>'+
+                '<div class="form-check">'+
+                    '<label class="form-check-label">'+
+                        '<input class="form-check-input" type="checkbox" id="validation_document">'+
+                          'Validar factura'+
+                        '<span class="form-check-sign"></span>'+
+                    '</label>'+
+                '</div>'+
+                '<div class="form-group">'+
+                   '<label for="validation_document_ob" ></label>'+
+                        '<input class="form-control" type="text" id="validation_document_ob" placeholder="Observación">'+
+        
+                '</div>'+
+              '</form>',
+      allowOutsideClick: false,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+
+
+      if (result.value) {
+        var  validation_document_ob = document.getElementById("validation_document_ob").value;
+        var validation_document=document.getElementById("validation_document").checked;
+        var tipo_evaluador=document.getElementById("tipo_evaluador").value;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        jQuery.ajax({
+          url: "{{url('/system/companie/documents/validate')}}",
+          method: 'post',
+          dataType: "JSON",
+          data: {"id":id,"validation_document":validation_document,"validation_document_ob":validation_document_ob,"tipo_evaluador":tipo_evaluador},
+          success: function(result){
+
+
+            if(result.types=="supererror"){ 
+               Swal.fire(
+                  'Sin permisos',
+                  'Lo sentimos pero no tiene permisos',
+                  'error'
+                );
+             
+            }else{
+               Swal.fire(
+                  'Validado!',
+                  'El archivo fue evaluado. \n'+result.ms,
+                  result.types
+                );
+
+
+
+               table
+                .row( colu.parents('tr') )
+                .remove()
+                .draw();
+              //colu.closest('tr').remove();
+            }
+
+                    
+           
+          },error: function(jqXHR, text, error){
+
+            Swal({
+              title: jqXHR+' '+text+' '+error,
+              type: 'error'
+            }).then(function(){ 
+             location.reload();
+             }
+           );
+
+
+          }
+        });
+
+      }
+    })
   }
   
 </script>

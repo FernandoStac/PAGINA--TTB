@@ -17,7 +17,7 @@
           <span class="navbar-toggler-bar"></span>
           <span class="navbar-toggler-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><i class="fa fa-building"></i> {{$companie->name}}</a>
+
       <div class="collapse navbar-collapse" id="navbar-primary">
       </div>
   </div>
