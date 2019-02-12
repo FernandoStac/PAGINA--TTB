@@ -1215,10 +1215,38 @@ background: red;
   background-color: #E9573F;
 }
 
-#documentsProvee{
+#documentsProvee,#myTable{
     width: 100% !important;
 }
 
 table.dataTable tbody th, table.dataTable tbody td {
-    padding: 4px 10px;
+    padding: 7px 10px;
+}
+
+
+.table .thead-dark th {
+
+
+    background-color: #343a40;
+    border-color: #343a40;
+
+}
+
+
+.table td, .table th {
+
+    padding: .70rem;
+
+    border-top:none !important;
+
+}
+
+
+.jumbotron {
+
+    padding: 10px 0px;
+    margin-bottom: 0;
+    background-color: #e9ecef;
+    border-radius: .3rem;
+
 }

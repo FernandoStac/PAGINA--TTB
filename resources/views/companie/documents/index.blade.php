@@ -3,10 +3,12 @@
 
 @section('css')
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
  
 @endsection
 @section('content')
+
+ 
+
 
 <nav class="navbar navbar-expand-md bg-light">
   <div class="container-fluid">
@@ -20,7 +22,7 @@
         <ul class="navbar-nav ml-auto">
 
           <li class="nav-item">
-            <a class="text-dark" style="cursor:pointer;" onclick="st_infoColores();"><i class="fa fa-address-book"></i> Colores en la tabla?</a>
+            <button class="btn btn-link text-dark"  onclick="st_infoColores();"><i class="fa fa-address-book"></i> Ayuda?</button>
           </li>
  
         </ul>
@@ -112,7 +114,7 @@
       $('#documentsProvee thead tr').clone(true).appendTo( '#documentsProvee thead' );
       $('#documentsProvee thead tr:eq(1) th').each( function (i) {
         var title = $(this).text();
-        $(this).html( '<input type="text" style="width:100px" class="form-control form-control-sm" placeholder="Buscar '+title+'" />' );
+        $(this).html( '<input type="text" style="width:100%" class="form-control form-control-sm" placeholder="Buscar '+title+'" />' );
          
         $( 'input', this ).on( 'keyup change', function () {
             if ( table.column(i).search() !== this.value ) {

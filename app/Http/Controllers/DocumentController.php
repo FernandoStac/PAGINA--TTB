@@ -108,21 +108,23 @@ class DocumentController extends Controller{
 
 
   public function destroyed(Request $request){
-    $id=$request ->input('id');
+    if(Access::canEnter("Eliminar documentos")){
+        $id=$request ->input('id');
+        $documentf=document::find($id);
+        if(is_null($documentf)){
 
-    $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado :(";
-    $documentf=document::find($id);
-    if(is_null($documentf)){
+               return response()->json(['types'=>"supererror",'ms'=>"El documento ya no existia"]);
+        }  
+        $fullPath=public_path() .'/'.$documentf->url.$documentf->document;
+        $deleted=File::delete($fullPath); 
+        
+        $documentf->delete();
+     
+        return response()->json(['types'=>"succes",'ms'=>"El documento fue eliminado :)"]);
+    }
+    return response()->json(['types'=>"supererror",'ms'=>"Lo sentimos pero no tiene permisos para eliminar documentos"]);
 
-       return response()->json("El archivo ya no existia.");
-    }  
-    $fullPath=public_path() .'/'.$documentf->url.$documentf->document;
-    $deleted=File::delete($fullPath); 
-    
-    $documentf->delete();
-    $notification="Documento eliminado :)";
- 
-    return response()->json($notification);
+
       
   }
 

@@ -84,6 +84,8 @@ Route::middleware(['auth','admin','web'])->group(function () {
 		Route::post('/access/update_to_role', 'AccessController@update_to_role');
 	////////////////////////////////
 
+    ///////////////////////documents
+		Route::post('/document/delete','DocumentController@destroyed');
 
 });
 
@@ -100,7 +102,7 @@ Route::middleware(['auth','companie'])->group(function () {
 	Route::post('/companie/document', 'DocumentController@store');
 	Route::delete('/document/delete/{id}','DocumentController@destroy');
 
-	Route::post('/document/delete','DocumentController@destroyed');
+	
 
 	//Route::get('/try','DocumentController@try');
 

@@ -2,20 +2,12 @@
 @section('title','Documentos')
 
 
-@section('css')
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
- 
-@endsection
+
 
 @section('content')
 
-<!-- <div class="wrapper ">
-    <div class="page-header page-header-xs" data-parallax="true" style="background-image: url('{{ asset('assets/img/fabio-mangione.jpg') }}');">
-        <div class="filter"></div>
-    </div>              
-</div>
- -->
+
 
 <nav class="navbar navbar-expand-md fixed-bottom bg-danger">
   <div class="container">
@@ -55,12 +47,14 @@
     <input type="hidden" name="tipo_evaluador" id="tipo_evaluador" value="{{$evaluacion_tipo}}">
   </form>
 
-
+<div class="jumbotron jumbotron-fluid">
+  <div class="container-fluid">
+      <h2 class="">{{$companie->name}} <span class="small">{{$evaluacion}}</span></h2>
+  </div>
+</div>
 <div class="container-fluid">  
   <div class="row">
     <div class="col-md-12">
-      <h2 class="text-info text-uppercase ">{{$companie->name}} <span class="small">{{$evaluacion}}</span></h2>
-      <br>
       @if(session('notification'))
       <div class="alert alert-success">
         {{session('notification')}}
@@ -70,7 +64,7 @@
       @if(!count($documents)==0 and !is_null($documents))
 <div class="table-responsive">
       
-        <table class="table" id="myTable">
+        <table class="display table dataTable no-footer" id="myTable">
           <thead class="thead-dark">
             <tr>
               <th scope="col">ID</th>
@@ -123,8 +117,8 @@
 
               </td>
               <td>
-                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver
-                    </a> 
+                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver <i class="fa fa-eye"></i>
+                    </a> - 
                     @if($evaluacion_tipo==1)
 
 
@@ -132,7 +126,7 @@
 
                        
                           <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
-                              Validar
+                              Validar <i class="fa fa-check"></i>
                             </a>
                          @endif
 
@@ -141,18 +135,22 @@
 
                          
                             <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
-                                Validar
+                                Validar <i class="fa fa-check"></i>
                               </a>
                            @endif
                    @elseif($evaluacion_tipo==3)
                      <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
-                                Validar
+                                Validar <i class="fa fa-check"></i>
                               </a>
                   @elseif($evaluacion_tipo==777)
                      <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
-                                Validar
+                                Validar <i class="fa fa-check"></i>
                               </a>
                  @endif
+
+                  - <a class="text-info font-weight-bold document_delete pointer" style="cursor:pointer;">
+                                Eliminar <i class="fa fa-trash"></i>
+                              </a> 
                     
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
@@ -295,17 +293,32 @@
 <script>
    var table;
   $(document).ready( function () {
+    $('#myTable thead tr').clone(true).appendTo( '#myTable thead' );
+    $('#myTable  thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" style="width:100%" class="form-control form-control-sm" placeholder="Buscar '+title+'" />' );
+         
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
 
-     $('#myTable thead th').each( function () {
-                var title = $(this).text();
-                $(this).html( '<input type="text" style="width:100px" placeholder="'+title+'" />' );
-      } );
+      });
+     // $('#myTable thead th').each( function () {
+     //            var title = $(this).text();
+     //            $(this).html( '<input type="text" style="width:100%" class="form-control form-control-sm" placeholder="Buscar '+title+'" />' );
+     //  } );
 
       table= $('#myTable').DataTable({
         "language": {
         "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
         },
         "paging":false,
+          orderCellsTop: true,
         rowCallback: function(row, data, index){
                 if(data[4] == "Rechazado"){
                     //$(row).css('background-color', 'blue');
@@ -349,19 +362,14 @@
 
 
     $('#myTable tbody').on( 'click', '.document_validate', function () {
-
-
-
-       var colu= $(this);//.closest('tr').remove();
-       //let id=($(this).closest('tr').find(".idValues").text());
-
-
-        // table
-        // .row( colu.parents('tr') )
-        // .remove()
-        // .draw();
-
+       var colu= $(this);
        st_validar(colu);
+      });
+
+
+    $('#myTable tbody').on( 'click', '.document_delete', function () {
+       var colu= $(this);
+       st_delete(colu);
       });
 
   });
@@ -479,6 +487,87 @@
                Swal.fire(
                   'Validado!',
                   'El archivo fue evaluado. \n'+result.ms,
+                  result.types
+                );
+
+
+
+               table
+                .row( colu.parents('tr') )
+                .remove()
+                .draw();
+              //colu.closest('tr').remove();
+            }
+
+                    
+           
+          },error: function(jqXHR, text, error){
+
+            Swal({
+              title: jqXHR+' '+text+' '+error,
+              type: 'error'
+            }).then(function(){ 
+             location.reload();
+             }
+           );
+
+
+          }
+        });
+
+      }
+    })
+  }
+
+
+
+
+
+
+
+
+
+  function st_delete(colu){
+    var id=colu.closest('tr').find(".idValues").text();
+   // var data = table.row( $(this).parents('tr') ).data(); 
+        //alert(data.id);
+    Swal.fire({
+      title: 'Eliminar el documento '+id,
+      text: "Esto ya no se podra revertir!",
+      allowOutsideClick: false,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+
+
+      if (result.value) {
+     
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        jQuery.ajax({
+          url: "{{url('/document/delete')}}",
+          method: 'post',
+          dataType: "JSON",
+          data: {"id":id},
+          success: function(result){
+            if(result.types=="supererror"){ 
+               Swal.fire(
+                  'Sin permisos',
+                  result.ms,
+                  'error'
+                );
+             
+            }else{
+               Swal.fire(
+                  'Éxito!',
+                  result.ms,
                   result.types
                 );
 

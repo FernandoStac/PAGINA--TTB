@@ -107,6 +107,11 @@ class RolesTableSeeder extends Seeder
                     'enabled'=>'true'
                 ]);
 
+         DescriptionAccess::create([
+                    'name'=>'Eliminar documentos',
+                    'menu_id'=>'3',
+                    'enabled'=>'true'
+                ]);
 
         DescriptionAccess::create([
                     'name'=>'Ver Roles',
