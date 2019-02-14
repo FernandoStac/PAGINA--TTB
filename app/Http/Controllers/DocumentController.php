@@ -229,6 +229,7 @@ class DocumentController extends Controller{
     $companie=companie::where("name_short",$companieName)->first();
     $user_id=Auth::user()->id;
     $type=Auth::user()->role->type;
+    $role=Auth::user()->role_id;
 
    
 
