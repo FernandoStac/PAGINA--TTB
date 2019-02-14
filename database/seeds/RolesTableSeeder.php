@@ -141,7 +141,7 @@ class RolesTableSeeder extends Seeder
                     'enabled'=>'true'
                 ]);
         DescriptionAccess::create([
-                    'name'=>'Permisos del Rol',
+                    'name'=>'Permisos del Role',
                     'menu_id'=>'4',
                     'enabled'=>'true'
                 ]);

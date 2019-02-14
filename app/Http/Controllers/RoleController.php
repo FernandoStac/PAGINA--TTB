@@ -11,7 +11,7 @@ class RoleController extends Controller
 {
 
     public function index(){
-        if(Access::canEnter("Ver roles")){
+        if(Access::canEnter("Ver Roles")){
             return view('system/roles/index');
         }
         abort(401,"Lo sentimos, no tiene permisos para ver los Roles");
