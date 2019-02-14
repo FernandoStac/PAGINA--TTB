@@ -11,8 +11,13 @@ use App\DescriptionAccess;
 
 class AccessController extends Controller
 {
+
+    //metodo principal para llamar al index
+    //
      public function index(){
-    	return view('system/accesses/index');
+    	
+
+        return view('system/accesses/index');
     	
     }
 
@@ -22,7 +27,7 @@ class AccessController extends Controller
  		 $access=DB::table('description_accesses')
 		->select('description_accesses.id as id','description_accesses.name as name','menus.name as nameMenu','menus.id as idmenu','description_accesses.enabled as dispo')
 		->leftJoin("menus","menus.id",'=',"description_accesses.menu_id")
-		//->where('description_accesses.enabled','1')
+
 		 
 		->get();
 		return response()->json(['data'=>$access]);
