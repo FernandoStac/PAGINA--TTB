@@ -61,6 +61,11 @@ class DocumentController extends Controller{
 
     $xml=$request ->file('xml');
 
+    // $xml = simplexml_load_file('xml'); 
+    // $ns = $xml->getNamespaces(true);
+    // $xml->registerXPathNamespace('c', $ns['cfdi']);
+    // $xml->registerXPathNamespace('t', $ns['tfd']);
+
     $sixml= false;
 
     if(!is_null ($xml))
@@ -70,6 +75,7 @@ class DocumentController extends Controller{
   $movedxml=$xml->move($path,$nameAndExtxml);
   $sixml=true;
 }
+
    
 
 
@@ -88,6 +94,8 @@ class DocumentController extends Controller{
          
       if($sixml){
         $fileFac->xml=true;
+        $fileFac->namexml=$nameAndExtxml;
+
       }
       $fileFac->save();
           try {
@@ -121,12 +129,12 @@ class DocumentController extends Controller{
 
 
   public function destroy($id){
-    $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado :(";
+    $notification="No fue posible eliminar el  documento, no existe o esta siendo utilizado";
     $documentf=document::find($id);
     $fullPath=public_path() .'/'.$documentf->url.$documentf->document;
-    $deleted=File::delete($fullPath);   
+    $deleted=File::delete($fullPath); 
     $documentf->delete();
-    $notification="Documento eliminado :)";
+    $notification="Documento eliminado";
     return back()->with(compact("notification"));
   }
 
@@ -140,8 +148,14 @@ class DocumentController extends Controller{
                return response()->json(['types'=>"supererror",'ms'=>"El documento ya no existia"]);
         }  
         $fullPath=public_path() .'/'.$documentf->url.$documentf->document;
+        $fullPathxml=public_path() .'/'.$documentf->url.$documentf->namexml;
+        
         $deleted=File::delete($fullPath); 
         
+        $deleted=File::delete($fullPathxml);
+        
+
+
         $documentf->delete();
      
         return response()->json(['types'=>"succes",'ms'=>"El documento fue eliminado :)"]);
@@ -170,7 +184,7 @@ class DocumentController extends Controller{
         // Define Dir Folder
         $public_dir=public_path();
         // Zip File Name
-        $zipFileName = 'All.zip';
+        $zipFileName = 'ALL.zip';
         $fullPath=public_path() . '/downloads/facturas/'.$zipFileName ;
         $deleted=File::delete($fullPath); 
 
@@ -182,8 +196,14 @@ class DocumentController extends Controller{
 
             $cont=0;
             foreach($documents as $document) {
+              if($document->xml){
+                $zip->addFile($public_dir .'/'.$document->url.$document->document, $document->namexml);
                 $zip->addFile($public_dir .'/'.$document->url.$document->document, $document->document);
-                $cont++;
+              }
+                else $zip->addFile($public_dir .'/'.$document->url.$document->document, $document->document);
+                
+              $cont++;
+              
             }        
 
             $zip->close();
@@ -226,8 +246,12 @@ class DocumentController extends Controller{
 
             $document=document::find($dato);
 
-          $zip->addFile($public_dir .'/'.$document->url.$document->document, $document->document);
-          $cont++;
+            if($document->xml){
+              $zip->addFile($public_dir .'/'.$document->url.$document->document, $document->namexml);
+              $zip->addFile($public_dir .'/'.$document->url.$document->document, $document->document);
+            }
+              else $zip->addFile($public_dir .'/'.$document->url.$document->document, $document->document);
+             
       }        
 
       $zip->close();

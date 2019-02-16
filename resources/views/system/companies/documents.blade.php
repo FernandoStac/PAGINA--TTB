@@ -119,6 +119,15 @@
               <td>
                     <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver <i class="fa fa-eye"></i>
                     </a> - 
+                    @if($document->xml)
+                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->namexml)}}">Ver XML<i class="fa fa-eye"></i> 
+                    
+                    @else<a class="text-notsuccess font-weight-bold" target="_black" >Ver XML<i class="fa fa-eye"></i> 
+                    </a> 
+                    
+                    @endif
+                     
+                    
                     @if($evaluacion_tipo==1)
 
 

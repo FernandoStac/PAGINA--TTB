@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddToDocumentsXml extends Migration
+class Namexml extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class AddToDocumentsXml extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->boolean('xml')->default(0);
-                        
-        });
+            $table->string('namexml')->nullable();
+
+           });
     }
 
     /**
@@ -26,8 +26,6 @@ class AddToDocumentsXml extends Migration
      */
     public function down()
     {
-        Schema::table('documents', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

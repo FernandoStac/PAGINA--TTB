@@ -35,10 +35,12 @@
             
             <form id="sendFile" method="post" enctype="multipart/form-data" class="">
                 {{csrf_field()}}
+               
                 <div class="form-group">
                   <label for="serie">Serie:</label>
                   <input type="text" class="form-control" id="serie" name="serie" placeholder="Serie del documento" >
                 </div>
+               
                 <div class="form-group">
                   <label for="folio">Folio:</label>
                   <input type="text" class="form-control" id="folio" name="folio" placeholder="Folio del documento" required="">
@@ -46,12 +48,10 @@
 
                 <div class="form-group">
                   <label for="document">Cargar archivo PDF</label>
-                  <input type="file" class="form-control-file" id="document" name="document" required="" accept=".pdf" title="Seleccio el documento correspondiente">
-                </div>
+                  <input type="file" class="form-control-file" id="document" name="document" required=".pdf" accept=".pdf" title="Seleccio el documento correspondiente">
+               </div>
 
-                
-
-                <div class="form-group">
+               <div class="form-group">
                   <label for="xml">Cargar archivo XML</label>
                   <input type="file" class="form-control-file" id="xml" name="xml"  accept=".xml" title="Seleccio el documento XML correspondiente">
                 </div>

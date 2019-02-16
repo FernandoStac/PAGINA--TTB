@@ -47,6 +47,7 @@
               <th scope="col">Folio</th>
               <th scope="col">Opciones</th>
               <th scope="col">Fecha</th>
+              <th scope="col">XML</th>
             </tr>
           </thead>
            
@@ -60,13 +61,30 @@
               <td>{{$document->estatus}}</td>
               <td>{{$document->serie}}</td>
               <td>{{$document->folio}}</td>
+              
               <td>
                  
-                    <a class="text-info" target="_blank" href="{{url($route.$document->url.$document->document)}}"><i class="fa fa-eye"></i> </a>
-
-                    <a class="text-info"  href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_3}}');"><i class="fa fa-question-circle"></i> </a>
+              <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver <i class="fa fa-eye"></i>
+                    </a> - 
+                    <a class="text-info"  href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->document}}');"><i class="fa fa-question-circle"></i> </a>
+                    
               </td>
-              <td>{{$document->created_at->format('d/m/y')}}</td>
+              <td>{{$document->created_at->format('d/m/Y')}}</td>
+              <!-- <td>{{$document->folio}}</td> -->
+              <td>     
+              @if($document->xml)
+                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver XML<i class="fa fa-eye"></i> 
+                    
+                    @else<a class="text-notsuccess font-weight-bold" target="_black" >Ver XML<i class="fa fa-eye"></i> 
+                    </a> 
+                    
+                    @endif
+                    
+              </td>
+                    
+
+
+
             </tr>
             @endforeach
            
