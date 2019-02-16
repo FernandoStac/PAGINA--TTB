@@ -30,6 +30,8 @@ class DocumentController extends Controller{
   public $empresa_mail;
   public function store(Request $request){
 
+    // return response()->json(['types'=>"success",'ms'=>'si funciona xD']);
+
     $now = new \DateTime();
     $date_Actual =$now->format('Y-m-d');
  		$monthYear =$now->format('Y-m');
@@ -45,6 +47,10 @@ class DocumentController extends Controller{
     $file=$request ->file('document');
 
     //name now is uuid
+    
+
+
+
     $exten=strtolower($file->getClientOriginalExtension());
     $serie=$request ->input('serie');
     $folio=$request ->input('folio');
@@ -52,6 +58,21 @@ class DocumentController extends Controller{
     $path=public_path() . '/files/'.$namecompanie.'/'.$user_email.'/'.$monthYear;
     $fileName=$file->getClientOriginalName();
     $moved=$file->move($path,$nameAndExt);
+
+    $xml=$request ->file('xml');
+
+    $sixml= false;
+
+    if(!is_null ($xml))
+{ $extenxml=strtolower($xml->getClientOriginalExtension());
+  $nameAndExtxml=$user_email.'_'.$serie.'_'.$folio.'.'.$extenxml;
+  $fileNamexml=$xml->getClientOriginalName();
+  $movedxml=$xml->move($path,$nameAndExtxml);
+  $sixml=true;
+}
+   
+
+
 
     if($moved){
          $fileFac=new document();
@@ -64,8 +85,11 @@ class DocumentController extends Controller{
          $fileFac->companie_id=$idcompanie;
          $fileFac->url='files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/';
          $fileName=$route.'files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/'.$nameAndExt;
-         $fileFac->save();
-
+         
+      if($sixml){
+        $fileFac->xml=true;
+      }
+      $fileFac->save();
           try {
 
 

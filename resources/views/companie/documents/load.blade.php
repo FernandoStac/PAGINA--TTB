@@ -45,8 +45,15 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="document">Cargar archivo</label>
-                  <input type="file" class="form-control-file" id="document" name="document" required="" accept=".pdf,.zip,.rar" title="Seleccio el documento correspondiente">
+                  <label for="document">Cargar archivo PDF</label>
+                  <input type="file" class="form-control-file" id="document" name="document" required="" accept=".pdf" title="Seleccio el documento correspondiente">
+                </div>
+
+                
+
+                <div class="form-group">
+                  <label for="xml">Cargar archivo XML</label>
+                  <input type="file" class="form-control-file" id="xml" name="xml"  accept=".xml" title="Seleccio el documento XML correspondiente">
                 </div>
 
                  <button class="btn btn-danger" id="sendfile">Guardar</button>
@@ -59,7 +66,7 @@
 
         <p class="text-danger">*El folio es un dato necesario</p>
         <p class="text-danger">*Archivo máximo de 10 megas</p>
-        <p class="text-danger">*Solo archivos en formato .pdf, .zip y .rar</p>
+        
         
       </div>
       <div class="col md-3"></div>
@@ -69,7 +76,7 @@
 
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" >
         <div class="modal-content">
     
             <div class="modal-body text-enter"> 
@@ -91,18 +98,26 @@
   jQuery(document).ready(function(){         
     
     jQuery('#sendFile').on('submit', function(e) {
-
+    //llamado pdf
       var fileInput = document.getElementById('document');
+    //llamado xml
+      var fileInputxml = document.getElementById('xml');
       var filePath = fileInput.value;
-      var allowedExtensions = /(.pdf|.rar|.zip)$/i;
+    //  var filePath = fileInput.value;
+    //  var filePath = fileInput1.value;
+      var allowedExtensions = /(.pdf|.rar|.zip|.xml)$/i;
+
+ 
       if(!allowedExtensions.exec(filePath)){
         Swal({
               type: 'warning',
               title: 'Oops...',
-              text: "Solo se permiten archivos en formato PDF, Zip, RAR",
+              text: "Solo se permiten archivos en formato PDF, Zip, RAR, XML",
             });
 
           fileInput.value = '';
+          fileInputxml.value = '';
+        //  fileInput.value1 = '';
           return false;
       }else{
 
@@ -114,15 +129,16 @@
           html: 'Espere por favor...',
           allowOutsideClick: false,
           onBeforeOpen: () => {
-            Swal.showLoading()
+          Swal.showLoading()
           
           }
         })
 
 
 
-
+        ////esto no se ejecuta
         e.preventDefault();
+
 
         var formData = new FormData(this);
         $.ajaxSetup({
@@ -169,11 +185,7 @@
           }
         });
 
-          // setTimeout(function() {
-          //   jQuery('.mess').hide();
-          // },3000);
 
-          //end else
       }
 
 

@@ -66,7 +66,7 @@
 
                     <a class="text-info"  href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_3}}');"><i class="fa fa-question-circle"></i> </a>
               </td>
-              <td>{{$document->created_at->format('Y/m/d')}}</td>
+              <td>{{$document->created_at->format('d/m/y')}}</td>
             </tr>
             @endforeach
            
@@ -81,7 +81,7 @@
       <br>
       <br>
    
-              <h3 class="text-danger">No cuenta con ningun documento cargado :) </h3>
+              <h3 class="text-danger">No cuenta con ningun documento cargado </h3>
   
       <br>
       <br>
