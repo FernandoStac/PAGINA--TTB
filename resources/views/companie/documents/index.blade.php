@@ -1,10 +1,7 @@
 @extends('layouts.public')
 @section('title','Inicio')
 
-@section('css')
 
- 
-@endsection
 @section('content')
 
  
@@ -18,6 +15,7 @@
           <span class="navbar-toggler-bar"></span>
       </button>
       <a class="navbar-brand text-dark" href="#"><i class="fa fa-building"></i>Información de documentos cargados</a>
+
       <div class="collapse navbar-collapse" id="navbar-primary">
         <ul class="navbar-nav ml-auto">
 
@@ -38,16 +36,17 @@
     <div class="col-md-12">
       @if(!count($documents)==0)
       <div class="table-responsive">
-        <table class="table" id="documentsProvee">
+        <table  class="table" id="documentsProvee">
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Status</th>
+              <th  scope="col">Status</th>
               <th scope="col">Serie</th>
               <th scope="col">Folio</th>
-              <th scope="col">Opciones</th>
+              <th scope="col">Validaciones</th>
               <th scope="col">Fecha</th>
-              <th scope="col">XML</th>
+              <th scope="col">Ver PDF y XML</th>
+              <!-- <th scope="col">XML</th> -->
             </tr>
           </thead>
            
@@ -57,25 +56,32 @@
                 
 
             <tr>
-              <th scope="row">{{$document->id}}</th>
-              <td>{{$document->estatus}}</td>
-              <td>{{$document->serie}}</td>
-              <td>{{$document->folio}}</td>
+             
+              <th scope="idvalues">{{$document->id}}</th>
+              <td align="center">{{$document->estatus}}</td>
+              <td align="center">{{$document->serie}}</td>
+              <td align="right">{{$document->folio}}</td>
+              <!-- <td>{{$document->xml}}</td> -->
               
-              <td>
-                 
-              <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver <i class="fa fa-eye"></i>
-                    </a> - 
-                    <a class="text-info"  href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->document}}');"><i class="fa fa-question-circle"></i> </a>
+              <td align="center">
+
+              
+                   
+                    <a class="text-info font-weight-bold"  href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_2}}');">Comentarios<i class="fa fa-comments-o" aria-hidden="true"></i>
                     
               </td>
-              <td>{{$document->created_at->format('d/m/Y')}}</td>
+              <td align="center">{{$document->created_at->format('d/m/Y')}}</td>
               <!-- <td>{{$document->folio}}</td> -->
-              <td>     
+              <td align="center">     
               @if($document->xml)
-                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver XML<i class="fa fa-eye"></i> 
+                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver PDF<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                    </a> -
+                    <a align="right" class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->namexml)}}">Ver XML<i class="fa fa-eye"></i> 
                     
-                    @else<a class="text-notsuccess font-weight-bold" target="_black" >Ver XML<i class="fa fa-eye"></i> 
+                    @else
+                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver PDF<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                    </a> -
+                    <a align="right" class="text-notsuccess font-weight-bold" target="_black"  >Ver XML<i class="fa fa-eye"></i> 
                     </a> 
                     
                     @endif
@@ -181,8 +187,8 @@
       html: '<p class="bg-danger text-light"> Documentos que fueron rechazados</p>'+
             '<p class="bg-success text-light"> Documentos aceptados por el receptor</p>'+
             '<p class="bg-light text-dark"> Documentos que aun no se han revisado</p>'+
-            '<p class="bg-light text-dark"><i class="fa fa-eye"></i>Ver el documento en otra pestaña</p>'+
-            '<p class="bg-light text-dark"><i class="fa fa-question-circle"></i>Información del seguimiento</p>',
+            '<p class="bg-light text-dark"><i class="fa fa-file-pdf-o"></i>Ver el documento en otra pestaña</p>'+
+            '<p class="bg-light text-dark"><i class="fa fa-comments-o"></i>Información del seguimiento</p>',
       type: 'info'
     });
   }

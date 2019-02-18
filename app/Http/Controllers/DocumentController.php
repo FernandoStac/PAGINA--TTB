@@ -95,15 +95,30 @@ class DocumentController extends Controller{
       if($sixml){
         $fileFac->xml=true;
         $fileFac->namexml=$nameAndExtxml;
-
+        $fileNamexml=$route.'files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/'.$nameAndExtxml;
       }
       $fileFac->save();
           try {
-
-
+      if($sixml){      
+            // $file1=[$fileName,$fileNamexml];
             $user = \App\User::find($user_id);
-            $user->notify(new NewNotification($fileName));
+            $user->notify(new \App\Notifications\InvoicePaid($fileName,$fileNamexml));
+      }
+      if($sixml==false){
+        
+        $user = \App\User::find($user_id);
+        $user->notify(new \App\Notifications\InvoicePaid($fileName));
 
+      }
+
+      
+
+       
+
+            // $user->notify (new MailMessage)
+            // ->subject("prueba 20,0000")
+            // ->markdown('mail.invoice.paid', $f);
+            // $user->notify(new NewNotification($fileNamexml));
             //$companie = \App\companie::find($idcompanie);
             //$companie->notify(new NewNotification($fileName));
 
@@ -282,7 +297,7 @@ class DocumentController extends Controller{
    
 
     if($type=="provee"){
-      $documents=document::select(DB::raw("id ,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 or v_1 is null) and (v_2=1 or v_2 is null) and (v_3 is null) ,'En proceso','Rechazado')) as estatus ,document, url, created_at, serie, folio,observ_1,observ_2,observ_3"))->where("user_id",$user_id)
+      $documents=document::select(DB::raw("id ,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 or v_1 is null) and (v_2=1 or v_2 is null) and (v_3 is null) ,'En proceso','Rechazado')) as estatus ,document, url, created_at, serie, folio,observ_1,observ_2,observ_3,xml,namexml"))->where("user_id",$user_id)
         ->orderBy('created_at','desc')
         ->paginate(1000);
       return view('companie.documents.index')->with(compact('documents','role','companie','route'));
@@ -300,9 +315,9 @@ class DocumentController extends Controller{
         $evaluacion_tipo=1;
         $evaluacion="Proceso 1";
       }elseif(Access::canEnter("Evaluador 2")){
-         $documents=document::where("companie_id",$companie->id)//->whereNotNull("id_v1")->whereNull("id_v2")->whereNull("id_v3")->where("v_1",1)
+         $documents=document::where("companie_id",$companie->id)->whereNull("id_v2")//->whereNotNull("id_v1")->whereNull("id_v2")->whereNull("id_v3")->where("v_1",1)
 
-        ->whereRaw('(v_1=1) or (v_2=1) or (v_3=1 or v_3=0) or (v_1=1 and v_2=1 and v_3=1)')
+        ->whereRaw('(v_1=1) ')
                   ->orderBy('created_at','desc')
                   ->paginate(1000);
         $evaluacion_tipo=2;

@@ -73,8 +73,9 @@
               <th scope="col">Folio</th>
 
               <th scope="col">Estatus</th>
-              <th scope="col">Acciones</th>
+              <th scope="col">Validaciones</th>
               <th scope="col">Fecha</th>
+              <th scope="col">Ver PDF y XML</th>
             </tr>
           </thead>
            
@@ -89,6 +90,7 @@
               <td>{{$document->serie}}</td>
          
               <td>{{$document->folio}}</td>
+              
               <td>
                 @if($evaluacion_tipo==1 or $evaluacion_tipo==777) 
                       @if(( !is_null($document->v_1) and $document->v_1==false) or  ( !is_null($document->v_2) and $document->v_2==false) or (!is_null($document->v_3) and $document->v_3==false))
@@ -117,25 +119,17 @@
 
               </td>
               <td>
-                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver <i class="fa fa-eye"></i>
-                    </a> - 
-                    @if($document->xml)
-                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->namexml)}}">Ver XML<i class="fa fa-eye"></i> 
-                    
-                    @else<a class="text-notsuccess font-weight-bold" target="_black" >Ver XML<i class="fa fa-eye"></i> 
-                    </a> 
-                    
-                    @endif
+
                      
                     
                     @if($evaluacion_tipo==1)
 
 
-                                @if(( is_null($document->v_1) ))
+                    @if(( is_null($document->v_1) ))
 
                        
                           <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
-                              Validar <i class="fa fa-check"></i>
+                              Validacion 1<i class="fa fa-check"></i>
                             </a>
                          @endif
 
@@ -144,12 +138,12 @@
 
                          
                             <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
-                                Validar <i class="fa fa-check"></i>
+                                Validacion 2 <i class="fa fa-check"></i>
                               </a>
                            @endif
                    @elseif($evaluacion_tipo==3)
                      <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
-                                Validar <i class="fa fa-check"></i>
+                                Validacion 3 <i class="fa fa-check"></i>
                               </a>
                   @elseif($evaluacion_tipo==777)
                      <a class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;">
@@ -163,7 +157,18 @@
                     
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
-
+              
+              <td>
+              <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver PDF<i class="fa fa-file-pdf-o"></i>
+                    </a> - 
+                    @if($document->xml)
+                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->namexml)}}">Ver XML<i class="fa fa-eye"></i> 
+                    
+                    @else<a class="text-notsuccess font-weight-bold" target="_black" >Ver XML<i class="fa fa-eye"></i> 
+                    </a> 
+                    
+                    @endif
+              </td>
             </tr>
             @endforeach
 
@@ -199,7 +204,7 @@
     
 </div>
 
-
+<!-- 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -610,4 +615,4 @@
   }
   
 </script>
-@endsection
+@endsection -->

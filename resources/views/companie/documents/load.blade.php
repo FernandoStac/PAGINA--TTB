@@ -105,7 +105,7 @@
       var filePath = fileInput.value;
     //  var filePath = fileInput.value;
     //  var filePath = fileInput1.value;
-      var allowedExtensions = /(.pdf|.rar|.zip|.xml)$/i;
+      var allowedExtensions = /(.pdf|.xml)$/i;
 
  
       if(!allowedExtensions.exec(filePath)){
@@ -172,7 +172,7 @@
             Swal.close();
 
             if(error="Payload Too Large"){
-              error="Documento sobrepasa los 10 Megabytes"
+              error="Documento sobrepasa los 100 Megabytes"
             }
             Swal({
               type: 'error',

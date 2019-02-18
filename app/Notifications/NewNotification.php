@@ -12,17 +12,20 @@ class NewNotification extends Notification
 {
     use Queueable;
 
-    protected $token;
-
+    
+    protected $archivos;
+    protected $is_a;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
 
-    public function __construct(string $token)
-    {
-        $this->token=$token;
+    public function __construct(array $archivos)
+    {   
+        $this->is_a=count($archivos);
+
+        $this->archivos=$archivos;
     }
 
     /**
@@ -44,11 +47,39 @@ class NewNotification extends Notification
      */
     public function toMail($notifiable)
     {
+
+        $pdf=url('/'.$this->archivos[0]);
+        // $xml=url('/'.$this->archivos[1]);
+
+        // if($this->is_a>1){
+        //     return (new MailMessage)
+        //             ->subject(Lang::getFromJson('Archivo cargado'))
+        //             ->line('Se cargo un archivo nuevo.')
+        //             //->line("<a class='btn btn-button' href='".$pdf."' >PDF</a> <br>")
+        //             //->line("<a class='btn btn-button' href='".$xml."' >xml</a>")
+        //             //->action('Ver archivo PDF', url('/'.$this->archivos[0]))
+        //             // ->action('Ver archivo PDF', url('/'.$this->archivos[0]))
+        //             ->action('Ver archivo XML', url('/'.$this->archivos[0]))
+        //             ->action('Ver archivo XML', url('/'.$this->archivos[1]));
+        // }
+        // if($this->is_a=0){
+        //     return (new MailMessage)
+        //             ->subject(Lang::getFromJson('Archivo cargado'))
+        //             ->line('Se cargo un archivo nuevo.')
+        //             //->line("<a class='btn btn-button' href='".$pdf."' >PDF</a> <br>")
+        //             //->line("<a class='btn btn-button' href='".$xml."' >xml</a>")
+        //             //->action('Ver archivo PDF', url('/'.$this->archivos[0]))
+        //             // ->action('Ver archivo PDF', url('/'.$this->archivos[0]))
+        //             ->action('Ver archivo XML', url('/'.$this->archivos[0]));
+        //             // ->action('Ver archivo XML', url('/'.$this->archivos[1]));
+        // }
+
         return (new MailMessage)
                     ->subject(Lang::getFromJson('Archivo cargado'))
                     ->line('Se cargo un archivo nuevo.')
-                    ->action('Ver', url('/'.$this->token))
-                    ->line('Gracias por usar la aplicación!');
+                    ->action('Ver archivo PDF', url('/'.$this->archivos[0]));
+        
+                    
     }
 
     /**
