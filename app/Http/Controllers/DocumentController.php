@@ -28,6 +28,7 @@ class DocumentController extends Controller{
 
   public $user_mail;
   public $empresa_mail;
+  
   public function store(Request $request){
 
     // return response()->json(['types'=>"success",'ms'=>'si funciona xD']);
@@ -92,6 +93,8 @@ class DocumentController extends Controller{
          $fileFac->url='files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/';
          $fileName=$route.'files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/'.$nameAndExt;
          
+
+         $fileNamexml=null;
       if($sixml){
         $fileFac->xml=true;
         $fileFac->namexml=$nameAndExtxml;
@@ -99,17 +102,17 @@ class DocumentController extends Controller{
       }
       $fileFac->save();
           try {
-      if($sixml){      
-            // $file1=[$fileName,$fileNamexml];
+     // if($sixml){      
+            $file1=[$fileName,$fileNamexml];
             $user = \App\User::find($user_id);
-            $user->notify(new \App\Notifications\InvoicePaid($fileName,$fileNamexml));
-      }
-      if($sixml==false){
-        
-        $user = \App\User::find($user_id);
-        $user->notify(new \App\Notifications\InvoicePaid($fileName));
+            $user->notify(new \App\Notifications\InvoicePaid($file1));
+     // }
+      // if($sixml==false){
+      //   $file1=[$fileName];
+      //   $user = \App\User::find($user_id);
+      //   $user->notify(new \App\Notifications\InvoicePaid($file1));
 
-      }
+      // }
 
       
 

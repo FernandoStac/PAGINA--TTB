@@ -21,9 +21,10 @@ class InvoicePaid extends Notification
 
     public function __construct(array $archivos)
     {   
-        $this->is_a=count($archivos);
+      
 
         $this->archivos=$archivos;
+        $this->is_a=count($archivos);
     }
 
     /**
@@ -51,23 +52,35 @@ class InvoicePaid extends Notification
    
      public function toMail($notifiable)
     {
-  
-        $url = url('/'.$this->archivos[0]);
-        $pdf = url('/'.$this->archivos[0]);
-        $xml = url('/'.$this->archivos[1]);
-       
-        if($this->is_a=1){
-       
-        return (new MailMessage)
-                ->subject('Invoice Paid')
-                ->markdown('mail.invoice.paid', ['url'=>$url, 'pdf' => $pdf,'xml'=>$xml ]);
+      //  if($archivos=[0]){
+            $url = url('/'.$this->archivos[0]);
+            $pdf = url('/'.$this->archivos[0]);
+            if(!is_null($this->archivos[1])){
+                $xml = url('/'.$this->archivos[1]);
+            }else{
+                $xml=1;
             }
-        if($this->is_a=0){
-       
-        return (new MailMessage)
-                ->subject('Invoice Paid')
-                ->markdown('mail.invoice.paid', ['url'=>$url, 'pdf' => $pdf,'xml'=>$pdf]);
-                    }
+            
+                   
+          // return dd($xml);
+            return (new MailMessage)
+                    ->subject('Invoice Paid')
+                    ->markdown('mail.invoice.paid', ['url'=>$url, 'pdf' => $pdf,'xml'=>$xml ]);
+           //     }     
+      
+        //     if($archivos=[1]){ 
+        //     $url = url('/'.$this->archivos[0]);
+        //     $pdf = url('/'.$this->archivos[0]);
+        //     $xml = url('/'.$this->archivos[1]);
+        
+        
+      
+        // return (new MailMessage)
+        //         ->subject('Invoice Paid')
+        //         ->markdown('mail.invoice.paid', ['url'=>$url, 'pdf' => $pdf,'xml'=>$xml ]);
+        //     }
+
+
                 
               
           
