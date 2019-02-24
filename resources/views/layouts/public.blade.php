@@ -13,15 +13,10 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
 
-    <!-- Bootstrap core CSS     -->
- <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/> -->
+
 	<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
 	<link href="{{ asset('assets/css/paper-kit.css?v=2.1.0') }}" rel="stylesheet"/>
 
-	<!--  CSS for Demo Purpose, don't include it in your project     -->
-	
-
-    <!--     Fonts and icons     -->
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{ asset('assets/css/nucleo-icons.css') }}" rel="stylesheet" />

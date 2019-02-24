@@ -1,26 +1,12 @@
 <?php
 
-
-
-// Route::get('notify', function () {
-
-
-
-
-//     //$user = \App\User::find(3);
-//     //$user->notify(new \App\Notifications\NewNotification());
-// });
-
-	Route::get('/notify', 'DocumentController@notify');//show
+Route::get('/notify', 'DocumentController@notify');//show
 
 
 ///////////public routes
 Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@index');
-/*Route::get('/', function () {
-    return view('welcome');
-});
-*/
+
 //downloads 
 Route::post('create-zip', 'DocumentController@zip')->name('create-zip');
 Route::post('create_zip_filter', 'DocumentController@zip_filter');
@@ -35,6 +21,15 @@ Route::middleware(['auth','admin','web'])->group(function () {
 	Route::get('/system/companie', 'CompanieController@index');//show
 	Route::post('/system/companie', 'CompanieController@store');//create
 	Route::post('/system/companie/delete', 'CompanieController@destroy');//delete
+
+
+
+	////////////////////////////////////////////
+	///Company show data by date filter
+	Route::get('/system/companie/date/{companie}/documents', 'DocumentController@pre_show');
+	Route::post('/system/companie/date/get/documents', 'DocumentController@show_date_filter');
+
+	/////////////////////////////////////////
 
 
 
@@ -101,12 +96,6 @@ Route::middleware(['auth','companie'])->group(function () {
 	//Route::get('/companie/document/load', 'DocumentController@index');
 	Route::post('/companie/document', 'DocumentController@store');
 	Route::delete('/document/delete/{id}','DocumentController@destroy');
-
-	
-
-	//Route::get('/try','DocumentController@try');
-
-
 
 	Route::get('/document/{companie}', 'DocumentController@show');
 
