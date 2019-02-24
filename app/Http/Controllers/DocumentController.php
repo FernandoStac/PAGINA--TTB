@@ -353,13 +353,6 @@ class DocumentController extends Controller{
   }
 
 
-
-
-
-
-
-
-
   public function sendemail(){
     $user_namecompanie=Auth::user()->comapanie->name_short;
      Mail::send('system.documents.send',['filename' => "prueba", 'name'=> "prueba"],function($msj){
@@ -423,8 +416,95 @@ class DocumentController extends Controller{
 
     $document->save();
     return response()->json(['types'=>"success",'ms'=>'Documento evaluado!']);
-  
+  }
 
+
+
+  public function pre_show($companieName){
+    $route=$this->route_url();
+    $companie=companie::where("name_short",$companieName)->first();
+      if(Access::canEnter("Evaluador 1")){
+        $evaluacion_tipo=1;
+        $evaluacion="Proceso 1";
+      }elseif(Access::canEnter("Evaluador 2")){
+        $evaluacion_tipo=2;
+        $evaluacion="Proceso 2";
+      }elseif(Access::canEnter("Evaluador 3")){
+        $evaluacion_tipo=3;
+        $evaluacion="Proceso 3";
+      }elseif(Access::canEnter("Evaluador Maestro")){
+          $evaluacion_tipo=777;
+          $evaluacion="Evaluación completa";
+      }else{
+          $evaluacion_tipo=null;
+          $evaluacion="";
+      }
+        return view('system.companies.documents_date_filter')->with(compact('companie','route','evaluacion_tipo','evaluacion'));
+  }
+
+
+  public function show_date_filter(Request $request){
+
+    
+    $d_start=$request->start_date;
+    $d_end=$request->start_date;
+    if($request->range_date="week"){
+      $d_actual = new \DateTime();
+      $d_intervalWeek = new \DateTime('-1 week');
+      $d_start=$d_intervalWeek->format('d/m/Y');
+      $d_end=$d_actual->format('d/m/Y');
+    }
+
+    $companie=companie::where("name_short",$request->ncompany)->first();
+    
+
+          if(Access::canEnter("Evaluador 1")){
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            ->leftJoin('users','documents.user_id',"=",'users.id')
+            ->leftJoin('companies','documents.companie_id','=','companies.id')
+            ->where("documents.companie_id",$companie->id)
+            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->orderBy('documents.created_at','desc')->get();
+          }elseif(Access::canEnter("Evaluador 2")){
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1) ,'Revisar',iif(v_1=1,'En proceso','Rechazado'))) as estatus"))
+            ->leftJoin('users','documents.user_id',"=",'users.id')
+            ->leftJoin('companies','documents.companie_id','=','companies.id')
+            ->where("documents.companie_id",$companie->id)
+            ->where("documents.v_1",'true')
+            ->whereNull("documents.v_2")
+            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->orderBy('documents.created_at','desc')->get();
+          }elseif(Access::canEnter("Evaluador 3")){
+
+
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 and v_2=1) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            ->leftJoin('users','documents.user_id',"=",'users.id')
+            ->leftJoin('companies','documents.companie_id','=','companies.id')
+            ->where("documents.companie_id",$companie->id)
+            ->where("v_1",'true')
+            ->where("v_2",'true')
+            ->whereNull("v_3")
+            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->orderBy('documents.created_at','desc')->get();
+          }elseif(Access::canEnter("Evaluador Maestro")){
+    
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            ->leftJoin('users','documents.user_id',"=",'users.id')
+            ->leftJoin('companies','documents.companie_id','=','companies.id')
+            ->where("documents.companie_id",$companie->id)
+            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->orderBy('documents.created_at','desc')->get();
+          }else{
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'En revisión',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            ->leftJoin('users','documents.user_id',"=",'users.id')
+            ->leftJoin('companies','documents.companie_id','=','companies.id')
+            ->where("documents.companie_id",$companie->id)
+            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->orderBy('documents.created_at','desc')->get();
+          }
+
+
+    return response()->json(['data'=> $documents]);
 
   }
 

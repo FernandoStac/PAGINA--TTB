@@ -204,8 +204,7 @@
     
 </div>
 
-<!-- 
-<!-- Modal -->
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -357,17 +356,17 @@
             }
       });
 
-    table.columns().every( function () {
-        var that = this;
+    // table.columns().every( function () {
+    //     var that = this;
  
-        $( 'input', this.header() ).on( 'keyup change', function () {
-            if ( that.search() !== this.value ) {
-                that
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );
+    //     $( 'input', this.header() ).on( 'keyup change', function () {
+    //         if ( that.search() !== this.value ) {
+    //             that
+    //                 .search( this.value )
+    //                 .draw();
+    //         }
+    //     } );
+    // } );
 
 
 
@@ -411,6 +410,8 @@
       valores.push($(this).html());
     });
     $('#fieldValues').val(valores);
+
+   // alert(valores);
      $('#byFilter').submit(); 
   }
   //send values to controller
@@ -615,4 +616,4 @@
   }
   
 </script>
-@endsection -->
+@endsection 

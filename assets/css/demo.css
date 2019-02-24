@@ -1165,7 +1165,7 @@
 display: none;
 background: red;
 }
-#documentsProvee_filter{
+#documentsProvee_filter,#documentsevaluation_filter,#documentsevaluation_info{
   display: none;  
 }
 
@@ -1215,7 +1215,7 @@ background: red;
   background-color: #E9573F;
 }
 
-#documentsProvee,#myTable{
+#documentsProvee,#myTable,#documentsevaluation{
     width: 100% !important;
 }
 
@@ -1244,7 +1244,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 
 .jumbotron {
 
-    padding: 10px 0px;
+    padding: 1px 0px;
     margin-bottom: 0;
     background-color: #e9ecef;
     border-radius: .3rem;
