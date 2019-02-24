@@ -1,11 +1,6 @@
 @extends('layouts.public')
-@section('title','Inicio')
-
-
+@section('title','Documentos')
 @section('content')
-
- 
-
 
 <nav class="navbar navbar-expand-md bg-light">
   <div class="container-fluid">
@@ -15,10 +10,8 @@
           <span class="navbar-toggler-bar"></span>
       </button>
       <a class="navbar-brand text-dark" href="#"><i class="fa fa-building"></i>Información de documentos cargados</a>
-
       <div class="collapse navbar-collapse" id="navbar-primary">
         <ul class="navbar-nav ml-auto">
-
           <li class="nav-item">
             <button class="btn btn-link text-dark"  onclick="st_infoColores();"><i class="fa fa-address-book"></i> Ayuda?</button>
           </li>
@@ -29,8 +22,6 @@
 </nav>
 <br>
 
-
-
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
@@ -40,57 +31,28 @@
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
-              <th  scope="col">Status</th>
+              <th scope="col">Status</th>
               <th scope="col">Serie</th>
               <th scope="col">Folio</th>
-              <th scope="col">Validaciones</th>
               <th scope="col">Fecha</th>
-              <th scope="col">Ver PDF y XML</th>
-              <!-- <th scope="col">XML</th> -->
+              <th scope="col">Acciones</th>
             </tr>
-          </thead>
-           
+          </thead>    
           <tbody>
-
-            @foreach($documents as $key => $document)
-                
-
-            <tr>
-             
+            @foreach($documents as $document)
+            <tr>        
               <th scope="idvalues">{{$document->id}}</th>
-              <td align="center">{{$document->estatus}}</td>
-              <td align="center">{{$document->serie}}</td>
-              <td align="right">{{$document->folio}}</td>
-              <!-- <td>{{$document->xml}}</td> -->
-              
-              <td align="center">
-
-              
-                   
-                    <a class="text-info font-weight-bold"  href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_2}}');">Comentarios<i class="fa fa-comments-o" aria-hidden="true"></i>
-                    
-              </td>
-              <td align="center">{{$document->created_at->format('d/m/Y')}}</td>
-              <!-- <td>{{$document->folio}}</td> -->
-              <td align="center">     
+              <td class="text-center">{{$document->estatus}}</td>
+              <td class="text-center">{{$document->serie}}</td>
+              <td class="text-center">{{$document->folio}}</td>
+              <td class="text-center">{{$document->created_at}}</td>
+              <td class="text-left">  
+              <a class="text-info font-weight-bold" title="Ver comentarios del seguimiento de las evaluaciones" data-placement="left"  data-toggle="tooltip"   href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_2}}');">Comentarios <i class="fa fa-comments-o" aria-hidden="true"></i>
+              <a onClick="window.open('{{url($route.$document->url.$document->document)}}','ventana','width=800,heigth=600');" title="Ver archivo PDF" data-placement="left"  data-toggle="tooltip" class="text-success font-weight-bold" href="#">- PDF <i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>   
               @if($document->xml)
-                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver PDF<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                    </a> -
-                    <a align="right" class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->namexml)}}">Ver XML<i class="fa fa-eye"></i> 
-                    
-                    @else
-                    <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver PDF<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                    </a> -
-                    <a align="right" class="text-notsuccess font-weight-bold" target="_black"  >Ver XML<i class="fa fa-eye"></i> 
-                    </a> 
-                    
-                    @endif
-                    
+                <a onClick="window.open('{{url($route.$document->url.$document->namexml)}}','ventana','width=800,heigth=600');" title="Ver archivo XML" data-placement="bottom"  data-toggle="tooltip"  class="text-success font-weight-bold" href="#">- XML<i class="fa fa-file-code-o"></i> 
+              @endif      
               </td>
-                    
-
-
-
             </tr>
             @endforeach
            
@@ -103,62 +65,55 @@
       <br>
       <br>
       <br>
-      <br>
-   
-              <h3 class="text-danger">No cuenta con ningun documento cargado </h3>
-  
+      <br> 
+      <h3 class="text-danger">No cuenta con ningun documento cargado </h3>
       <br>
       <br>
       <br>
       <br>
-      @endif
-          
+      @endif   
     </div>
- 
-  </div>
-    
+  </div>   
 </div>
-
-
-
-
-@include('includes.footer')
 @endsection
 
 @section('scripts')
-
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript">
-
   var table;
-
   $(document).ready(function() {
+    $('a').on('shown.bs.tooltip', function () {
+      setTimeout(function() {   //calls click event after a certain time
+          $('[data-toggle="tooltip"]').tooltip('hide');
+        }, 2000);
+    });
 
-      $('#documentsProvee thead tr').clone(true).appendTo( '#documentsProvee thead' );
-      $('#documentsProvee thead tr:eq(1) th').each( function (i) {
-        var title = $(this).text();
-        $(this).html( '<input type="text" style="width:100%" class="form-control form-control-sm" placeholder="Buscar '+title+'" />' );
-         
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
+    $('#documentsProvee thead tr').clone(true).appendTo( '#documentsProvee thead' );
+    $('#documentsProvee thead tr:eq(1) th').each( function (i) {
+      var title = $(this).text();
+      $(this).html( '<input type="text" style="width:100%" class="form-control form-control-sm" placeholder="Buscar '+title+'" />' );
+        
+      $( 'input', this ).on( 'keyup change', function () {
+          if ( table.column(i).search() !== this.value ) {
+              table
+                  .column(i)
+                  .search( this.value )
+                  .draw();
+          }
+      } );
 
-      });
-
-
+    });
      
-     table= $('#documentsProvee').DataTable( {
+    table= $('#documentsProvee').DataTable( {
           "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
           },"paging":false,
            orderCellsTop: true,
-           "order": [[ 5, "desc" ]],
+           "order": [[ 4, "desc" ]],
+           columnDefs:[{targets:4, render:function(data){
+              return moment(data).format('D/MM/Y');
+            }}],
             rowCallback: function(row, data, index){
                 if(data[1] == "Rechazado"){
                     //$(row).css('background-color', 'blue');
@@ -166,7 +121,6 @@
                     $('td a', row).addClass('text-light');
                     $('td a', row).removeClass('text-success text-info text-danger');
                 }
-
                 if(data[1] == "Aceptado"){
                     //$(row).css('background-color', 'blue');
                     $( row ).addClass( "bg-success text-light");
@@ -175,11 +129,8 @@
                 }
 
             }
-      });
-
     });
-
-
+  });
 
   function st_infoColores(){
     Swal({
@@ -187,19 +138,18 @@
       html: '<p class="bg-danger text-light"> Documentos que fueron rechazados</p>'+
             '<p class="bg-success text-light"> Documentos aceptados por el receptor</p>'+
             '<p class="bg-light text-dark"> Documentos que aun no se han revisado</p>'+
-            '<p class="bg-light text-dark"><i class="fa fa-file-pdf-o"></i>Ver el documento en otra pestaña</p>'+
-            '<p class="bg-light text-dark"><i class="fa fa-comments-o"></i>Información del seguimiento</p>',
+            '<p class="bg-light text-dark"><i class="fa fa-file-pdf-o"></i> Ver el documento en otra pestaña</p>'+
+            '<p class="bg-light text-dark"><i class="fa fa-comments-o"></i> Información del seguimiento</p>'+
+            '<p class="bg-light text-dark"><i class="fa fa-file-code-o"></i> Icono solo si cuenta con XML</p>',
       type: 'info'
     });
   }
-
 
   function st_infoDcument(m1,m2,m3){
     let ms="Información";
     if(m1=="" & m2=="" & m3==""){
       ms="Sin observaciones";
     }
-
     Swal({
       title:ms,
       html: '<p class="">Obervación 1: '+ m1+'</p>'+
@@ -208,8 +158,6 @@
       type: 'info'
     });
   }
-
-  
 
 </script>
 
