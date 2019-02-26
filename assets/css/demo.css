@@ -1247,6 +1247,32 @@ table.dataTable tbody th, table.dataTable tbody td {
     padding: 1px 0px;
     margin-bottom: 0;
     background-color: #e9ecef;
-    border-radius: .3rem;
+    border-radius: none;
 
+}
+
+.card {
+
+    border-radius: 12px;
+    box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+    background-color: #FFFFFF;
+    color: #333333;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    border: 0 none;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    -ms-transition: none;
+    transition: none;
+
+}
+
+.card:not(.card-plain):hover {
+    box-shadow: 0px 12px 19px -7px rgba(0, 0, 0, 0.3);
+    transform: none;
+    -webkit-transform: none;
+    -ms-transform: none;
+    -moz-transform: none;
 }
