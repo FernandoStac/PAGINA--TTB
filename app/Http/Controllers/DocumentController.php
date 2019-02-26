@@ -55,6 +55,7 @@ class DocumentController extends Controller{
     $exten=strtolower($file->getClientOriginalExtension());
     $serie=$request ->input('serie');
     $folio=$request ->input('folio');
+    $tipo=$request->grupos;
     $nameAndExt=$user_email.'_'.$serie.'_'.$folio.'.'.$exten;
     $path=public_path() . '/files/'.$namecompanie.'/'.$user_email.'/'.$monthYear;
     $fileName=$file->getClientOriginalName();
@@ -77,8 +78,13 @@ class DocumentController extends Controller{
   $sixml=true;
 }
 
-   
+   if($tipo){
+   $tipo='Grupos';
 
+   }
+   else{
+     $tipo='Individuales';
+   }
 
 
     if($moved){
@@ -89,6 +95,7 @@ class DocumentController extends Controller{
          $fileFac->date=$date_Actual;
          $fileFac->document=$nameAndExt;
          $fileFac->user_id=$user_id;
+         $fileFac->tipo=$tipo;
          $fileFac->companie_id=$idcompanie;
          $fileFac->url='files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/';
          $fileName=$route.'files/'.$namecompanie.'/'.$user_email.'/'.$monthYear.'/'.$nameAndExt;
@@ -300,7 +307,7 @@ class DocumentController extends Controller{
    
 
     if($type=="provee"){
-      $documents=document::select(DB::raw("id ,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 or v_1 is null) and (v_2=1 or v_2 is null) and (v_3 is null) ,'En proceso','Rechazado')) as estatus ,document, url, created_at, serie, folio,observ_1,observ_2,observ_3,xml,namexml"))->where("user_id",$user_id)
+      $documents=document::select(DB::raw("id ,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 or v_1 is null) and (v_2=1 or v_2 is null) and (v_3 is null) ,'En proceso','Rechazado')) as estatus ,document, url, created_at, serie,tipo, folio,observ_1,observ_2,observ_3,xml,namexml"))->where("user_id",$user_id)
         ->orderBy('created_at','desc')
         ->paginate(1000);
       return view('companie.documents.index')->with(compact('documents','role','companie','route'));
@@ -447,8 +454,8 @@ class DocumentController extends Controller{
 
     
     $d_start=$request->start_date;
-    $d_end=$request->start_date;
-    if($request->range_date="week"){
+    $d_end=$request->end_date;
+    if($request->range_date=""){
       $d_actual = new \DateTime();
       $d_intervalWeek = new \DateTime('-1 week');
       $d_start=$d_intervalWeek->format('d/m/Y');
@@ -459,14 +466,14 @@ class DocumentController extends Controller{
     
 
           if(Access::canEnter("Evaluador 1")){
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
             ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }elseif(Access::canEnter("Evaluador 2")){
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1) ,'Revisar',iif(v_1=1,'En proceso','Rechazado'))) as estatus"))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1) ,'Revisar',iif(v_1=1,'En proceso','Rechazado'))) as estatus ,observ_1 ,tipo"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
@@ -477,7 +484,7 @@ class DocumentController extends Controller{
           }elseif(Access::canEnter("Evaluador 3")){
 
 
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 and v_2=1) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 and v_2=1) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
@@ -488,14 +495,14 @@ class DocumentController extends Controller{
             ->orderBy('documents.created_at','desc')->get();
           }elseif(Access::canEnter("Evaluador Maestro")){
     
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus ,observ_1 ,tipo"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
             ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }else{
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'En revisión',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  "))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'En revisión',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)

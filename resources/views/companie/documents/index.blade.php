@@ -45,6 +45,7 @@
               <th scope="col">Folio</th>
               <th scope="col">Validaciones</th>
               <th scope="col">Fecha</th>
+              <th scope="col">Tipo</th>              
               <th scope="col">Ver PDF y XML</th>
               <!-- <th scope="col">XML</th> -->
             </tr>
@@ -71,7 +72,7 @@
                     
               </td>
               <td align="center">{{$document->created_at->format('d/m/Y')}}</td>
-              <!-- <td>{{$document->folio}}</td> -->
+              <td align="left">{{$document->tipo}}</td>
               <td align="center">     
               @if($document->xml)
                     <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver PDF<i class="fa fa-file-pdf-o" aria-hidden="true"></i>

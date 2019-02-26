@@ -54,7 +54,7 @@
             <div class="col-md-3">                 
               <div class="form-group">
                   <div class='input-group date' id='datetimepickerr'>
-                      <input type='text' class="form-control datetimepicker"  name="start_date" id="start_date" placeholder="05/08/2017" />
+                      <input type='text' class="form-control datepicker"  name="start_date" id="start_date" placeholder="Fecha Inicio" />
                       <span class="input-group-addon">
                           <span class="glyphicon glyphicon-calendar"><i class="fa fa-calendar" aria-hidden="true"></i></span>
                       </span>
@@ -64,7 +64,7 @@
           <div class="col-md-3">
             <div class="form-group">
                 <div class='input-group date' id='datetimepickerr2'>
-                    <input type='text' name="end_date" id="end_date" class="form-control datetimepicker" placeholder="05/08/2017" />
+                    <input type='text' name="end_date" id="end_date" class="form-control datetimepicker" placeholder="Fecha Fin" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"><i class="fa fa-calendar" aria-hidden="true"></i></span>
                     </span>
@@ -75,7 +75,7 @@
             
           <div class="col-md-3">    
             <div class="form-group">
-               <input type="button" name="searchdate" id="searchdate" value="Search" class="btn btn-info btn-sm form-control" />       
+               <input type="button" name="searchdate" id="searchdate" value="Filtrar" class="btn btn-info btn-sm form-control" />       
               </div>
            </div>
 
@@ -90,6 +90,8 @@
               <th scope="col">Serie</th>
               <th scope="col">Folio</th>
               <th scope="col">Estatus</th>
+              <th scope="col">Observaciones1</th>
+              <th scope="col">Tipo</th>
               <th scope="col">Fecha</th>
               <th scope="col">Acciones</th>
             </tr>
@@ -263,7 +265,7 @@
     });
 
 
-    fetch_data('week',"","",);
+    fetch_data('day',"","",);
 
 
 
@@ -279,7 +281,7 @@
       }
       else
       {
-      alert("Both Date is Required");
+      alert("La captura de la fecha es obligada");
       }
     }); 
     
@@ -338,15 +340,20 @@
           range_date:range_date, start_date:start_date, end_date:end_date ,ncompany:ncompany
         }
       },
+      
       "columns": [
             { data: "id" },
             { data: "proveedor" },
             { data: "serie" },
             { data: "folio" },
             { data: "estatus" },
-            { data: "created_at" },
+            { data: "observ_1" }, 
+            { data: "tipo" },            
+            {data: "created_at"},
             { "defaultContent": '@if(App\Access::canEnter("Evaluador 1") or App\Access::canEnter("Evaluador 2") or App\Access::canEnter("Evaluador 3") or App\Access::canEnter("Evaluador Maestro")) <a title="Validar documento" class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;"><i class="fa fa-check"></i>-</a> @endif @if(App\Access::canEnter("Eliminar documentos"))<a title="Eliminar el archivo" class="text-info font-weight-bold document_delete pointer" style="cursor:pointer;"><i class="fa fa-trash"></i></a>- @endif <a title="Ver archivo PDF" class="see_pdf text-success font-weight-bold" style="cursor:pointer;"><i class="fa fa-file-pdf-o"></i></a><a class="see_xml text-success font-weight-bold" style="cursor:pointer;">-<i class="fa fa-file-code-o" title="Ver XML"></i> </a> ' }
+          
           ],
+          
           rowCallback: function(row, data, index){
                 if(data[ "xml"]==0){
                   $('td .see_xml', row).addClass('d-none');

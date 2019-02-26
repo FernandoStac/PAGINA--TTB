@@ -75,6 +75,7 @@
               <th scope="col">Estatus</th>
               <th scope="col">Validaciones</th>
               <th scope="col">Fecha</th>
+              <th scope="col">Tipo</th>
               <th scope="col">Ver PDF y XML</th>
             </tr>
           </thead>
@@ -157,7 +158,7 @@
                     
               </td>
               <td>{{$document->created_at->format('d/m/Y')}}</td>
-              
+              <td align="left">{{$document->tipo}}</td>
               <td>
               <a class="text-success font-weight-bold" target="_blank" href="{{url($route.$document->url.$document->document)}}">Ver PDF<i class="fa fa-file-pdf-o"></i>
                     </a> - 
