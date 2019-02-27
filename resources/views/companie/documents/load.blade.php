@@ -29,15 +29,15 @@
                     <label for="folio">Folio:</label>
                     <input type="text" class="form-control" id="folio" name="folio" placeholder="Folio del documento" required="">
                   </div>
-
+                  <div class="form-group">
+                  <label for="grupos">Si su factura es de Grupos favor de marcar la casilla:</label>
+                  <input type="checkbox" class="form-control" id="grupos" name="grupos">
+                </div>
                   <div class="form-group">
                     <label for="document">Cargar archivo PDF</label>
                     <input type="file" class="form-control-file" id="document" name="document" required=".pdf" accept=".pdf" title="Seleccio el documento correspondiente">
                 </div>
-                <div class="form-group">
-                  <label for="grupos">Si su factura es de Grupos favor de marcar la casilla:</label>
-                  <input type="checkbox" class="form-control" id="grupos" name="grupos">
-                </div>
+
                 <div class="form-group">
                     <label for="xml">Cargar archivo XML</label>
                     <input type="file" class="form-control-file" id="xml" name="xml"  accept=".xml" title="Seleccio el documento XML correspondiente">

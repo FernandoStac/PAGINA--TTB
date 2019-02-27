@@ -48,8 +48,8 @@
               <td class="text-center">{{$document->folio}}</td>
               <td class="text-center">{{$document->created_at}}</td>
               <td class="text-left">{{$document->tipo}}</td>
- 
-              <a class="text-info font-weight-bold" title="Ver comentarios del seguimiento de las evaluaciones" data-placement="left"  data-toggle="tooltip"   href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_2}}');">Comentarios <i class="fa fa-comments-o" aria-hidden="true"></i>
+              
+              <td class="text-info font-weight-bold" title="Ver comentarios del seguimiento de las evaluaciones" data-placement="left"  data-toggle="tooltip"   href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_2}}');">Comentarios <i class="fa fa-comments-o" aria-hidden="true"></i>
               <a onClick="window.open('{{url($route.$document->url.$document->document)}}','ventana','width=800,heigth=600');" title="Ver archivo PDF" data-placement="left"  data-toggle="tooltip" class="text-success font-weight-bold" href="#">- PDF <i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>   
               @if($document->xml)
                 <a onClick="window.open('{{url($route.$document->url.$document->namexml)}}','ventana','width=800,heigth=600');" title="Ver archivo XML" data-placement="bottom"  data-toggle="tooltip"  class="text-success font-weight-bold" href="#">- XML<i class="fa fa-file-code-o"></i> 
