@@ -78,13 +78,13 @@ class DocumentController extends Controller{
   $sixml=true;
 }
 
-   if($tipo){
-   $tipo='Grupos';
+  //  if($tipo){
+  //  $tipo='Grupos';
 
-   }
-   else{
-     $tipo='Individuales';
-   }
+  //  }
+  //  else{
+  //    $tipo='Individuales';
+  //  }
 
 
     if($moved){
@@ -384,6 +384,7 @@ class DocumentController extends Controller{
 
 
   }
+
 
 
   public function document_validate(Request $request){
