@@ -455,7 +455,7 @@ class DocumentController extends Controller{
     
     $d_start=$request->start_date;
     $d_end=$request->end_date;
-    if($request->range_date=""){
+    if($request->range_date=='week'){
       $d_actual = new \DateTime();
       $d_intervalWeek = new \DateTime('-1 week');
       $d_start=$d_intervalWeek->format('d/m/Y');

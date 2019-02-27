@@ -209,6 +209,7 @@
           <div class="left-side">
             <button  class="btn btn-default btn-link"  id="sendUpdateUser">Actualizar</button>
           </div>
+          
           <div class="divider"></div>
           <div class="right-side">
             <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Cancelar</button>

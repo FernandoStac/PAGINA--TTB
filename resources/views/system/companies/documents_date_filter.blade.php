@@ -265,7 +265,7 @@
     });
 
 
-    fetch_data('day',"","",);
+    fetch_data('week',"","",);
 
 
 
@@ -354,6 +354,11 @@
           
           ],
           
+          columnDefs:[{targets:7, render:function(data){
+              return moment(data).format('D/MM/Y');
+            }}],
+
+
           rowCallback: function(row, data, index){
                 if(data[ "xml"]==0){
                   $('td .see_xml', row).addClass('d-none');
