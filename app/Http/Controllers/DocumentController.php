@@ -519,4 +519,24 @@ class DocumentController extends Controller{
 
 
 
+
+  
+  public function edit_fields(Request $request){
+    $document=document::find($request->id);
+    $user_id=Auth::user()->id;
+  
+  
+    $document->tipo=$request->gruposvalue;
+    $document->observ_1=$request->obvalue;
+
+  
+
+  $document->save();
+  return response()->json(['types'=>"success",'ms'=>'Documento evaluado!']);
+}
+
+
+
+
+
 }

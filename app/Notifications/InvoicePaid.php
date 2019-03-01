@@ -64,7 +64,7 @@ class InvoicePaid extends Notification
                    
           // return dd($xml);
             return (new MailMessage)
-                    ->subject('Invoice Paid')
+                    ->subject('Notificación de carga IM.')
                     ->markdown('mail.invoice.paid', ['url'=>$url, 'pdf' => $pdf,'xml'=>$xml ]);
            //     }     
       

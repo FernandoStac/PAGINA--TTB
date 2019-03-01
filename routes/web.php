@@ -42,6 +42,7 @@ Route::middleware(['auth','admin','web'])->group(function () {
 	//////////////////////////////////
 
 	Route::post('/system/companie/documents/validate', 'DocumentController@document_validate');
+	Route::post('/system/companie/documents/edit_fields', 'DocumentController@edit_fields');
 	//////////////////////////////
 
 

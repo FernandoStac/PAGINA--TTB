@@ -1,5 +1,4 @@
 @component('mail::message')
-# Introduction
 
 Hola!
 Se cargo un archivo nuevo.
@@ -7,8 +6,6 @@ Se cargo un archivo nuevo.
 
 @php 
 $d=""
-
-
 @endphp
 
 @php 
@@ -22,15 +19,11 @@ $d=implode(['url' => $xml],$d)
 Ver xml
 @endcomponent
 @endif
-
  <br>
-
 @component('mail::button', ['url' => $pdf])
 Ver PDF
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
 @endcomponent
 
 

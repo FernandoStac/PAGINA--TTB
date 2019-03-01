@@ -75,7 +75,7 @@
             
           <div class="col-md-3">    
             <div class="form-group">
-               <input type="button" name="searchdate" id="searchdate" value="Filtrar" class="btn btn-info btn-sm form-control" />       
+               <input type="button" name="searchdate" id="searchdate" value="Filtrar" class="btn btn-danger btn-sm form-control" />       
               </div>
            </div>
 
@@ -291,6 +291,12 @@
        st_validar(colu);
       });
 
+    $('#documentsevaluation tbody').on( 'click', '.document_edit_fields', function () {
+      var colu= $(this);
+      st_edit_fields(colu);
+       
+    });
+
     $('#documentsevaluation tbody').on( 'click', '.see_pdf', function () {
       let colu= $(this);
 
@@ -350,7 +356,7 @@
             { data: "observ_1" }, 
             { data: "tipo" },            
             {data: "created_at"},
-            { "defaultContent": '@if(App\Access::canEnter("Evaluador 1") or App\Access::canEnter("Evaluador 2") or App\Access::canEnter("Evaluador 3") or App\Access::canEnter("Evaluador Maestro")) <a title="Validar documento" class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;"><i class="fa fa-check"></i>-</a> @endif @if(App\Access::canEnter("Eliminar documentos"))<a title="Eliminar el archivo" class="text-info font-weight-bold document_delete pointer" style="cursor:pointer;"><i class="fa fa-trash"></i></a>- @endif <a title="Ver archivo PDF" class="see_pdf text-success font-weight-bold" style="cursor:pointer;"><i class="fa fa-file-pdf-o"></i></a><a class="see_xml text-success font-weight-bold" style="cursor:pointer;">-<i class="fa fa-file-code-o" title="Ver XML"></i> </a> ' }
+            { "defaultContent": '@if(App\Access::canEnter("Evaluador 1") or App\Access::canEnter("Evaluador 2") or App\Access::canEnter("Evaluador 3") or App\Access::canEnter("Evaluador Maestro")) <a title="Validar documento" class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;"><i class="fa fa-check"></i>-</a> @endif @if(App\Access::canEnter("Eliminar documentos"))<a title="Eliminar el archivo" class="text-info font-weight-bold document_delete pointer" style="cursor:pointer;"><i class="fa fa-trash"></i></a>- @endif <a title="Ver archivo PDF" class="see_pdf text-success font-weight-bold" style="cursor:pointer;"><i class="fa fa-file-pdf-o"></i></a><a class="see_xml text-success font-weight-bold" style="cursor:pointer;">-<i class="fa fa-file-code-o" title="Ver XML"></i> </a> @if(App\Access::canEnter("Editar facturas"))<a title="Editar campos" class="text-info font-weight-bold document_edit_fields pointer" style="cursor:pointer;">-<i class="fa fa-edit"></i></a> @endif' }
           
           ],
           
@@ -549,6 +555,106 @@
     })
   }
 
+  function st_edit_fields(colu){
+    //var id=colu.closest('tr').find(".idValues").text();
+    //console.log(colu.val());
+   var id = (dataTable.row( colu.parents('tr') ).data()).id; 
+   var ob = (dataTable.row( colu.parents('tr') ).data()).observ_1; 
+   var tipo = (dataTable.row( colu.parents('tr') ).data()).tipo; 
+   let t1="";
+   let t2="";
+   if(ob===null){
+     ob="";
+   }
+   if(tipo=="Grupos"){
+      t1="selected";
+   }else if(tipo=="Individuales"){
+     t2="selected";
+   }
+      
+    Swal.fire({
+      title: 'Editar '+id,
+      html: '<br>'+
+            '<form>'+
+                '<div class="form-group">'+
+                        '<input class="form-control" type="text" id="obvalue" placeholder="observacion" value='+ob+'>'+
+        
+                '</div>'+
+               '<div class="form-group">'+
+                  '<label for="gruposvalue">Seleccione su tipo de factura</label>'+
+                  '<select id="gruposvalue" class="form-control" >'+
+                  '<option></option>'+
+                   '<option '+t1+'>Grupos</option>'+
+                    '<option '+t2+'>Individuales</option>'+
+                   '</select>'+
+                '</div>'+
+
+              '</form>',
+      allowOutsideClick: false,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+
+
+      if (result.value) {
+        var  obvalue= document.getElementById("obvalue").value;
+        var gruposvalue=document.getElementById("gruposvalue").value;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        jQuery.ajax({
+          url: "{{url('/system/companie/documents/edit_fields')}}",
+          method: 'post',
+          dataType: "JSON",
+          data: {"id":id,"obvalue":obvalue,"gruposvalue":gruposvalue},
+          success: function(result){
+
+
+            if(result.types=="supererror"){ 
+               Swal.fire(
+                  'Sin permisos',
+                  'Lo sentimos pero no tiene permisos',
+                  'error'
+                );
+             
+            }else{
+               Swal.fire(
+                  'Validado!',
+                  'Registro actualizado \n'+result.ms,
+                  result.types
+                );
+
+
+
+               dataTable.ajax.reload();
+            }
+
+                    
+           
+          },error: function(jqXHR, text, error){
+
+            Swal({
+              title: jqXHR+' '+text+' '+error,
+              type: 'error'
+            }).then(function(){ 
+             location.reload();
+             }
+           );
+
+
+          }
+        });
+
+      }
+    })
+  }
 
 
 

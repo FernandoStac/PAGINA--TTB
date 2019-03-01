@@ -49,11 +49,11 @@
               <td class="text-center"title="Fecha de cargado">{{$document->created_at}}</td>
               <td class="text-left"title="Tipo de documento">{{$document->tipo}}</td>
               <td class="text-left"> 
-              <a class="text-info font-weight-bold" title="Ver comentarios del seguimiento de las evaluaciones" data-placement="left"  data-toggle="tooltip"   href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_2}}');">Comentarios <i class="fa fa-comments-o" aria-hidden="true"></i>
-              <a onClick="window.open('{{url($route.$document->url.$document->document)}}','ventana','width=800,heigth=600');" title="Ver archivo PDF" data-placement="left"  data-toggle="tooltip" class="text-success font-weight-bold" href="#">- PDF <i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>   
-              @if($document->xml)
-                <a onClick="window.open('{{url($route.$document->url.$document->namexml)}}','ventana','width=800,heigth=600');" title="Ver archivo XML" data-placement="bottom"  data-toggle="tooltip"  class="text-success font-weight-bold" href="#">- XML<i class="fa fa-file-code-o"></i> 
-              @endif      
+                <a class="text-info font-weight-bold" title="Ver comentarios del seguimiento de las evaluaciones" data-placement="left"  data-toggle="tooltip"   href="#" onclick="st_infoDcument('{{$document->observ_1}}','{{$document->observ_2}}','{{$document->observ_2}}');"><i class="fa fa-comments-o" aria-hidden="true"></i>
+                <a onClick="window.open('{{url($route.$document->url.$document->document)}}','ventana','width=800,heigth=600');" title="Ver archivo PDF" data-placement="left"  data-toggle="tooltip" class="text-success font-weight-bold" href="#">- PDF <i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>   
+                @if($document->xml)
+                  <a onClick="window.open('{{url($route.$document->url.$document->namexml)}}','ventana','width=800,heigth=600');" title="Ver archivo XML" data-placement="bottom"  data-toggle="tooltip"  class="text-success font-weight-bold" href="#">- XML<i class="fa fa-file-code-o"></i> 
+                @endif      
               </td>
             </tr>
             @endforeach
@@ -88,7 +88,7 @@
     $('a').on('shown.bs.tooltip', function () {
       setTimeout(function() {   //calls click event after a certain time
           $('[data-toggle="tooltip"]').tooltip('hide');
-        }, 2000);
+        }, 1000);
     });
 
     $('#documentsProvee thead tr').clone(true).appendTo( '#documentsProvee thead' );

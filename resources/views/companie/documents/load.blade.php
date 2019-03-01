@@ -34,7 +34,7 @@
                   <input type="checkbox" class="form-control" id="grupos" name="grupos">
                  </div> -->
                  <div class="form-group">
-                  <label for="inputState">Seleccione su tipo de factura</label>
+                  <label for="grupos">Seleccione su tipo de factura</label>
                   <select id="grupos" name="grupos" class="form-control">
                     <option selected>Grupos</option>
                     <option>Individuales</option>
