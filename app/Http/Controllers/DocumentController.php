@@ -390,6 +390,7 @@ class DocumentController extends Controller{
   public function document_validate(Request $request){
       $document=document::find($request->id);
       $user_id=Auth::user()->id;
+      $information[]="";
     if($request->tipo_evaluador==1){
       $document->id_v1=$user_id;
       $document->v_1=$request->validation_document;
@@ -420,6 +421,19 @@ class DocumentController extends Controller{
 
     }else{
        return response()->json(['types'=>"supererror",'ms'=>'Lo sentimos pero usted no tiene permisos para evaluar']);
+    }
+
+    if(($request->tipo_evaluador==777 or $request->tipo_evaluador==3) and $request->validation_document=='true'){
+
+      $information=['yes','fue aceptado',$document->serie."_".$document->folio,"cloud/".$document->url.$document->document];
+
+      $this->send_notification($information,$document->user_id,$document->id_v1);
+    }elseif($request->validation_document=='false'){
+    //  print("ayudante");
+      $information=['not','fue rechazado',$document->serie."_".$document->folio,"cloud/".$document->url.$document->document];
+
+      $this->send_notification($information,$document->user_id,$document->id_v1);
+
     }
 
     $document->save();
@@ -459,8 +473,8 @@ class DocumentController extends Controller{
     if($request->range_date=='week'){
       $d_actual = new \DateTime();
       $d_intervalWeek = new \DateTime('-1 week');
-      $d_start=$d_intervalWeek->format('d/m/Y');
-      $d_end=$d_actual->format('d/m/Y');
+      $d_start=$d_intervalWeek->format('Y/m/d');
+      $d_end=$d_actual->format('Y/m/d');
     }
 
     $companie=companie::where("name_short",$request->ncompany)->first();
@@ -471,7 +485,7 @@ class DocumentController extends Controller{
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
-            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->whereRaw("[date] between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }elseif(Access::canEnter("Evaluador 2")){
             $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1) ,'Revisar',iif(v_1=1,'En proceso','Rechazado'))) as estatus ,observ_1 ,tipo"))
@@ -480,7 +494,7 @@ class DocumentController extends Controller{
             ->where("documents.companie_id",$companie->id)
             ->where("documents.v_1",'true')
             ->whereNull("documents.v_2")
-            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->whereRaw("[date] between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }elseif(Access::canEnter("Evaluador 3")){
 
@@ -492,7 +506,7 @@ class DocumentController extends Controller{
             ->where("v_1",'true')
             ->where("v_2",'true')
             ->whereNull("v_3")
-            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->whereRaw("[date] between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }elseif(Access::canEnter("Evaluador Maestro")){
     
@@ -500,14 +514,14 @@ class DocumentController extends Controller{
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
-            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->whereRaw("[date] between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }else{
             $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'En revisión',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
-            ->whereRaw("convert(varchar, date, 103) between '". $d_start."' and '".$d_end."'")
+            ->whereRaw("[date] between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }
 
@@ -524,17 +538,24 @@ class DocumentController extends Controller{
   public function edit_fields(Request $request){
     $document=document::find($request->id);
     $user_id=Auth::user()->id;
-  
-  
     $document->tipo=$request->gruposvalue;
     $document->observ_1=$request->obvalue;
+    $document->save();
+    return response()->json(['types'=>"success",'ms'=>'Documento evaluado!']);
+  }
 
-  
+  public function send_notification($information,$user_id,$id_v1){
+            $information2=$information;
+            $user = \App\User::find($user_id);
+            array_push($information,$user->name);
+            $user->notify(new \App\Notifications\ProviderNotification($information));
 
-  $document->save();
-  return response()->json(['types'=>"success",'ms'=>'Documento evaluado!']);
-}
 
+            $user2 = \App\User::find($id_v1);
+            array_push($information2,$user2->name);
+            $user2->notify(new \App\Notifications\ProviderNotification($information2));
+            return 0;
+  }
 
 
 

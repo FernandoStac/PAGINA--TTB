@@ -246,7 +246,7 @@
         clear: 'fa fa-trash',
         close: 'fa fa-remove'
       },
-      format:'DD/MM/YYYY '
+      format:'YYYY/MM/DD'
     });
 
     $('#datetimepickerr2').datetimepicker({
@@ -261,7 +261,7 @@
         clear: 'fa fa-trash',
         close: 'fa fa-remove'
       },
-      format:'DD/MM/YYYY '
+      format:'YYYY/MM/DD'
     });
 
 
@@ -543,7 +543,7 @@
               title: jqXHR+' '+text+' '+error,
               type: 'error'
             }).then(function(){ 
-             location.reload();
+            // location.reload();
              }
            );
 

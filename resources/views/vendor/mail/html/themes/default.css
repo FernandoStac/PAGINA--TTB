@@ -238,11 +238,11 @@ img {
 
 .button-red,
 .button-error {
-    background-color: #bf5329;
-    border-top: 10px solid #bf5329;
-    border-right: 18px solid #bf5329;
-    border-bottom: 10px solid #bf5329;
-    border-left: 18px solid #bf5329;
+    background-color: #f7765f;
+    border-top: 10px solid #f7765f;
+    border-right: 18px solid #f7765f;
+    border-bottom: 10px solid #f7765f;
+    border-left: 18px solid #f7765f;
 }
 
 /* Panels */
