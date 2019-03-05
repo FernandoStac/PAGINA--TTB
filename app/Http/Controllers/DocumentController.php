@@ -425,19 +425,30 @@ class DocumentController extends Controller{
 
     if(($request->tipo_evaluador==777 or $request->tipo_evaluador==3) and $request->validation_document=='true'){
 
-      $information=['yes','fue aceptado',$document->serie."_".$document->folio,"cloud/".$document->url.$document->document];
+      $information=['yes','fue aceptado',$document->serie." ".$document->folio,"cloud/".$document->url.$document->document];
 
       $this->send_notification($information,$document->user_id,$document->id_v1);
-    }elseif($request->validation_document=='false'){
+    }elseif($request->validation_document=='false' and $request->tipo_evaluador==1 ){
     //  print("ayudante");
-      $information=['not','fue rechazado',$document->serie."_".$document->folio,"cloud/".$document->url.$document->document];
+      $information=['not','fue rechazado',$document->serie." ".$document->folio." ".$document->observ_1,"cloud/".$document->url.$document->document];
 
       $this->send_notification($information,$document->user_id,$document->id_v1);
 
+    }elseif($request->validation_document=='false' and $request->tipo_evaluador==2 ){
+        //  print("ayudante");
+          $information=['not','fue rechazado',$document->serie." ".$document->folio." ".$document->observ_2,"cloud/".$document->url.$document->document];
+    
+          $this->send_notification($information,$document->user_id,$document->id_v1);
+     }elseif($request->validation_document=='false' and $request->tipo_evaluador==3 or $request->tipo_evaluador==777 ){
+        //  print("ayudante");
+          $information=['not','fue rechazado',$document->serie." ".$document->folio." ".$document->observ_3,"cloud/".$document->url.$document->document];
+      
+          $this->send_notification($information,$document->user_id,$document->id_v1);
+         
     }
 
     $document->save();
-    return response()->json(['types'=>"success",'ms'=>'Documento evaluado!']);
+    return response()->json(['ms'=>'Documento evaluado!']);
   }
 
 
