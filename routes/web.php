@@ -105,6 +105,20 @@ Route::middleware(['auth','companie'])->group(function () {
 
 
 
+Route::get('test_notification', function () {
+
+	
+				 Mail::send('system.documents.send',['filename' => "prueba", 'name'=> "prueba"],function($msj){
+							$msj->subject('Se realizo una activación');
+							$msj->to('fernando.alvarez@binstala.com.mx');
+							$msj->cc('javier@martjav.com');
+					});
+	
+				 return "correo enviado :)";
+	
+});
+
+
 
 /////////////////////////////APIS
 Route::get('/api/user', 'UserController@getUsers');
