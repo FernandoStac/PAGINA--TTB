@@ -498,6 +498,17 @@
         var validation_document=document.getElementById("validation_document").checked;
         var tipo_evaluador=document.getElementById("tipo_evaluador").value;
 
+
+        Swal({
+          title: 'Notificando!',
+          html: 'Espere por favor...',
+          allowOutsideClick: false,
+          onBeforeOpen: () => {
+          Swal.showLoading()
+          
+          }
+        })
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -511,7 +522,7 @@
           data: {"id":id,"validation_document":validation_document,"validation_document_ob":validation_document_ob,"tipo_evaluador":tipo_evaluador},
           success: function(result){
 
-
+            Swal.close();
             if(result.types=="supererror"){ 
                Swal.fire(
                   'Sin permisos',
@@ -538,7 +549,7 @@
                     
            
           },error: function(jqXHR, text, error){
-
+            Swal.close();
             Swal({
               title: jqXHR+' '+text+' '+error,
               type: 'error'
