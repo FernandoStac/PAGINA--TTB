@@ -4,24 +4,24 @@
 @section('content')
     <div class="wrapper">
 
-        <div class="page-header section-dark" style="background-image: url('https://source.unsplash.com/collection/540518/')">
+        <div class="page-header section-dark" style="background-image: url('{{ asset('assets/img/Destinos.jpg') }}'); ">
             <div class="filter"></div>
             <div class="content-center">
                 <div class="container">
                     <div class="title-brand">
-                        <h1 class="presentation-title"> InvoicePDF</h1>
-                        <div class="fog-low">
+                        <h3 class="presentation-title"> InvoicePDF</h3>
+                        <!-- <div class="fog-low">
                             <img src="assets/img/fog-low.png" alt="">
-                        </div>
-                        <div class="fog-low right">
+                        </div> -->
+                        <!-- <div class="fog-low right">
                             <img src="assets/img/fog-low.png" alt="">
-                        </div>
+                        </div> -->
                     </div>
 
                     <h2 class="presentation-subtitle text-center">{{date('d-m-Y')}}</h2>
                 </div>
             </div>
-            <div class="moving-clouds" style="background-image: url('{{ asset('assets/img/clouds.png') }}'); ">
+            <!-- <div class="page-header" style="background-image: url('{{ asset('assets/img/Destinos.jpg') }}'); "> -->
 
             </div>
        

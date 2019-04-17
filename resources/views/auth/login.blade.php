@@ -10,15 +10,24 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" id="main-stylesheet" data-version="1.1.0" href="{{ asset('core/styles/accents/info.1.1.0.css') }}">
 </head>
-<body class="antialiased font-sans">
-  <div class="md:flex min-h-screen">
-    <div class="w-full md:w-1/2 bg-white flex items-center justify-center">
-      <div class="col-md-10">
-          <div class="form-group">   
+<body class="antialiased font-sans" >
+  
+  <div class="md:flex min-h-screen" >
+    
+    <div class="w-full md:w-1/2 bg-white flex items-center justify-center"  >
+    
+    <div class="col-md-10">
+      
+          <div class="form-group" >   
             <br>
+            <img src="{{ asset('assets/img/LogoEmpresa.jpg ') }}" class="img-fluid" alt="logoprincipal">
             <h2>Login</h2>
+            
             <br>
+           
+           
             <div class="h-1 bg-info" style="background-color:#f7765f !important"></div>
+            
         
           </div>
 
@@ -71,10 +80,10 @@
         </form>
       </div>
     </div>
+    
 
-
-    <div class="relative pb-full md:flex md:pb-0 md:min-h-screen w-full md:w-1/3">
-        <div style="background-image: url('https://source.unsplash.com/collection/540518/');"  class="absolute pin bg-cover bg-no-repeat md:bg-left lg:bg-center">
+    <div class="relative pb-50 md:flex md:pb-full md:min-h-screen w-full md:w-full" style="background-image: url('{{ asset('assets/img/Cabo1.jpg') }}'); ">
+        <div >
         </div>
     </div>
   </div>

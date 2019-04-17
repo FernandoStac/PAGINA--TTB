@@ -1,12 +1,13 @@
-/* Base */
+Base
 
 body, body *:not(html):not(style):not(br):not(tr):not(code) {
     font-family: Avenir, Helvetica, sans-serif;
     box-sizing: border-box;
 }
 
-body {
-    background-color: #f5f8fa;
+ {
+    
+    /* background-color: #f5f8fa; */
     color: #74787E;
     height: 100%;
     hyphens: auto;
@@ -64,11 +65,11 @@ h3 {
 }
 
 p {
-    color: #74787E;
+    color: rgb(0, 0, 0);
     font-size: 16px;
     line-height: 1.5em;
     margin-top: 0;
-    text-align: left;
+    text-align: center;
 }
 
 p.sub {
@@ -82,7 +83,7 @@ img {
 /* Layout */
 
 .wrapper {
-    background-color: #343A41;
+    background-color: rgb(0, 0, 0);
     margin: 0;
     padding: 0;
     width: 100%;
@@ -108,7 +109,7 @@ img {
 }
 
 .header a {
-    color: #bbbfc3;
+    color: #ffffff;
     font-size: 19px;
     font-weight: bold;
     text-decoration: none;
@@ -118,19 +119,21 @@ img {
 /* Body */
 
 .body {
+    background-image: url("5b8c4f4f76bef2012-05-30 14.40.18.jpg");
     background-color: #FFFFFF;
     border-bottom: 1px solid #EDEFF2;
     border-top: 1px solid #EDEFF2;
     margin: 0;
     padding: 0;
     width: 100%;
-    -premailer-cellpadding: 0;
+    -premailer-cellpadding: 0;  
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
 }
 
 .inner-body {
-    background-color: #FFFFFF;
+
+    background-color: rgb(255, 255, 255);
     margin: 0 auto;
     padding: 0;
     width: 570px;
@@ -164,7 +167,7 @@ img {
 }
 
 .footer p {
-    color: #AEAEAE;
+    color: rgb(255, 255, 255);
     font-size: 12px;
     text-align: center;
 }
