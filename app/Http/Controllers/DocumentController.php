@@ -15,6 +15,18 @@ use Redirect;
 use File;
 use ZipArchive;
 use App\Access;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Controller;
+
+
+class UsersController extends Controller 
+{
+    public function export() 
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
+    }
+}
 
 
 class DocumentController extends Controller{
@@ -56,6 +68,7 @@ class DocumentController extends Controller{
     $serie=$request ->input('serie');
     $folio=$request ->input('folio');
     $tipo=$request->grupos;
+    $moneda=$request->moneda;
     $nameAndExt=$user_email.'_'.$serie.'_'.$folio.'.'.$exten;
     $path=public_path() . '/files/'.$namecompanie.'/'.$user_email.'/'.$monthYear;
     $fileName=$file->getClientOriginalName();
@@ -258,9 +271,11 @@ class DocumentController extends Controller{
     $public_dir=public_path();
     // Zip File Name
     $zipFileName = 'All_Filters.zip';
+    
     $fullPath=public_path() . '/downloads/facturas/'.$zipFileName ;
-    $deleted=File::delete($fullPath); 
 
+    $deleted=File::delete($fullPath); 
+    return Excel::download(new usersExport, 'users.xlsx');
     $zip = new ZipArchive;
 
     if ($zip->open($public_dir . '/downloads/facturas/' . $zipFileName, ZipArchive::CREATE) === TRUE) {    
@@ -294,6 +309,8 @@ class DocumentController extends Controller{
     }
   return back();
   }
+
+  
 
 
 
@@ -492,14 +509,14 @@ class DocumentController extends Controller{
     
 
           if(Access::canEnter("Evaluador 1")){
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo"))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo,Moneda,Total"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
             ->whereRaw("[date] between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }elseif(Access::canEnter("Evaluador 2")){
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1) ,'Revisar',iif(v_1=1,'En proceso','Rechazado'))) as estatus ,observ_1 ,tipo"))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1) ,'Revisar',iif(v_1=1,'En proceso','Rechazado'))) as estatus ,observ_1 ,tipo,Moneda,Total"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
@@ -510,7 +527,7 @@ class DocumentController extends Controller{
           }elseif(Access::canEnter("Evaluador 3")){
 
 
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 and v_2=1) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo"))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1=1 and v_2=1) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo,Moneda,Total"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
@@ -521,14 +538,14 @@ class DocumentController extends Controller{
             ->orderBy('documents.created_at','desc')->get();
           }elseif(Access::canEnter("Evaluador Maestro")){
     
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus ,observ_1 ,tipo"))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'Revisar',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus ,observ_1 ,tipo,Moneda,Total"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
             ->whereRaw("[date] between '". $d_start."' and '".$d_end."'")
             ->orderBy('documents.created_at','desc')->get();
           }else{
-            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'En revisión',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo"))
+            $documents=document::select(DB::raw("documents.id,users.name as proveedor,serie,folio,documents.created_at,document,xml,url,namexml,iif(v_1=1 and v_2=1 and v_3=1,'Aceptado',iif((v_1 is null and v_1 is null) ,'En revisión',iif(v_1=1 and (v_2=1 or v_2 is null) and (v_3=1 or v_3 is null),'En proceso','Rechazado'))) as estatus  ,observ_1 ,tipo,Moneda,Total"))
             ->leftJoin('users','documents.user_id',"=",'users.id')
             ->leftJoin('companies','documents.companie_id','=','companies.id')
             ->where("documents.companie_id",$companie->id)
@@ -550,6 +567,8 @@ class DocumentController extends Controller{
     $document=document::find($request->id);
     $user_id=Auth::user()->id;
     $document->tipo=$request->gruposvalue;
+    $document->moneda=$request->monedavalue;
+    $document->total=$request->totalvalue;  
     $document->observ_1=$request->obvalue;
     $document->save();
     return response()->json(['types'=>"success",'ms'=>'Documento evaluado!']);

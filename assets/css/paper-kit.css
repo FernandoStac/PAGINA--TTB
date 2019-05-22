@@ -5909,12 +5909,12 @@ textarea.form-control {
 
 .moving-clouds {
   position: absolute;
-  z-index: 1;
+  z-index: -1;
   bottom: 0;
   left: 0;
-  width: 250.625em;
-  height: 43.75em;
-  -webkit-animation: cloudLoop 80s linear infinite;
+  width: 1250.625em;
+  height: 45.75em;
+  -webkit-animation: cloudLoop 1000s linear infinite;
   animation: cloudLoop 80s linear infinite;
 }
 

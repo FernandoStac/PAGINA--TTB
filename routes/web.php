@@ -28,6 +28,7 @@ Route::middleware(['auth','admin','web'])->group(function () {
 	///Company show data by date filter
 	Route::get('/system/companie/date/{companie}/documents', 'DocumentController@pre_show');
 	Route::post('/system/companie/date/get/documents', 'DocumentController@show_date_filter');
+	
 
 	/////////////////////////////////////////
 

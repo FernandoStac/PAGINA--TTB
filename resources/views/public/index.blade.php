@@ -4,12 +4,30 @@
 @section('content')
     <div class="wrapper">
 
-        <div class="page-header section-dark" style="background-image: url('{{ asset('assets/img/Destinos.jpg') }}'); ">
-            <div class="filter"></div>
+        <div class="page-header " >
+        <div class="content-center">
+        <br/><br/>
+        <br/><br/>
+        <br/><br/>
+        <br/><br/>
+        <br/><br/>
+        <!-- <br/><br/> -->
+        <br/><br/> -->
+                    <!-- <br/><br/> -->
+
+            <div class="moving-clouds"style="background: url('{{ asset('assets/img/completo.jpg') }}'); "></div>
+            
+            <!-- <img src="{{ asset('assets/img/LogoEmpresa.jpg ') }}" class="moving-clouds" alt="logoprincipal"> -->
+            <!-- <div class="moving-clouds"style="background-image: url('{{ asset('assets/img/LogoEmpresa.jpg') }}'); "></div> -->
             <div class="content-center">
                 <div class="container">
-                    <div class="title-brand">
-                        <h3 class="presentation-title"> InvoicePDF</h3>
+                    <div class="bg-gradient-r aligncenter">
+                    <br/><br/>
+                    <br/><br/>
+                    <br/><br/>
+                    
+                    <br/><br/>    
+                        <!-- <h3 class="presentation-title"   > InvoicePDF</h3> -->
                         <!-- <div class="fog-low">
                             <img src="assets/img/fog-low.png" alt="">
                         </div> -->
@@ -18,7 +36,7 @@
                         </div> -->
                     </div>
 
-                    <h2 class="presentation-subtitle text-center">{{date('d-m-Y')}}</h2>
+                    
                 </div>
             </div>
             <!-- <div class="page-header" style="background-image: url('{{ asset('assets/img/Destinos.jpg') }}'); "> -->
@@ -28,10 +46,11 @@
         </div>
         <div class="main">
        
-            <div class="section section-dark section-nucleo-icons">
-                
+            <!-- <div class="section section-dark section-nucleo-icons"> -->
+            
+            <!-- <h2 class="presentation-title text-center">{{date('d-m-Y')}}</h2> -->
 
-                <div class="container">
+                <!-- <div class="container">
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <h2 class="title">¡Administración de documentos!</h2><br/>
@@ -83,7 +102,7 @@
             </div>
         </div>
     </footer>
-
+ -->
 
 
 @endsection

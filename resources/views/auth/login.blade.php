@@ -21,7 +21,7 @@
           <div class="form-group" >   
             <br>
             <img src="{{ asset('assets/img/LogoEmpresa.jpg ') }}" class="img-fluid" alt="logoprincipal">
-            <h2>Login</h2>
+            <h1 align="center">Inicio de Sesión</h1>
             
             <br>
            

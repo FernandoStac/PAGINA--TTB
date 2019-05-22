@@ -23,7 +23,13 @@
             <a class="nav-link" href="#"   onclick="idGet()"><i class="fa fa-file-pdf-o"></i> Descargar por filtro</a>
             </form>
           </li>
-    
+          <li class="nav-item">
+            <form id="byFilter" action="{{ url('create_zip_filter')}}" method="post">
+              {{csrf_field()}}
+              <input type="hidden" id="fieldValues" name="fieldValues">
+            <a class="nav-link" href="#"   onclick="idGet()"><i class="fa fa-file-excel-o"></i> Descargar Xls</a>
+            </form>
+          </li>
 
           @if(App\Access::canEnter("Editar empresas"))
           <li class="nav-item">
@@ -91,7 +97,9 @@
               <th scope="col">Folio</th>
               <th scope="col">Estatus</th>
               <th scope="col">Observaciones1</th>
+              <th scope="col">Moneda</th>
               <th scope="col">Tipo</th>
+              <th scope="col">Total</th>
               <th scope="col">Fecha</th>
               <th scope="col">Acciones</th>
             </tr>
@@ -354,13 +362,15 @@
             { data: "folio" },
             { data: "estatus" },
             { data: "observ_1" }, 
-            { data: "tipo" },            
+            { data: "Moneda" },
+            { data: "tipo" },
+            { data: "Total" },            
             {data: "created_at"},
             { "defaultContent": '@if(App\Access::canEnter("Evaluador 1") or App\Access::canEnter("Evaluador 2") or App\Access::canEnter("Evaluador 3") or App\Access::canEnter("Evaluador Maestro")) <a title="Validar documento" class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;"><i class="fa fa-check"></i>-</a> @endif @if(App\Access::canEnter("Eliminar documentos"))<a title="Eliminar el archivo" class="text-info font-weight-bold document_delete pointer" style="cursor:pointer;"><i class="fa fa-trash"></i></a>- @endif <a title="Ver archivo PDF" class="see_pdf text-success font-weight-bold" style="cursor:pointer;"><i class="fa fa-file-pdf-o"></i></a><a class="see_xml text-success font-weight-bold" style="cursor:pointer;">-<i class="fa fa-file-code-o" title="Ver XML"></i> </a> @if(App\Access::canEnter("Editar facturas"))<a title="Editar campos" class="text-info font-weight-bold document_edit_fields pointer" style="cursor:pointer;">-<i class="fa fa-edit"></i></a> @endif' }
           
           ],
           
-          columnDefs:[{targets:7, render:function(data){
+          columnDefs:[{targets:9, render:function(data){
               return moment(data).format('D/MM/Y');
             }}],
 
@@ -571,18 +581,33 @@
     //console.log(colu.val());
    var id = (dataTable.row( colu.parents('tr') ).data()).id; 
    var ob = (dataTable.row( colu.parents('tr') ).data()).observ_1; 
-   var tipo = (dataTable.row( colu.parents('tr') ).data()).tipo; 
+   var tipo = (dataTable.row( colu.parents('tr') ).data()).tipo;
+   var moneda = (dataTable.row( colu.parents('tr') ).data()).Moneda;
+   var total = (dataTable.row( colu.parents('tr') ).data()).Total; 
+  //  alert(total);
    let t1="";
    let t2="";
+   let t3="";
+   let t4="";
    if(ob===null){
      ob="";
+   }
+   if(total===null){
+    total="";
+   }
+   if(moneda=="Pesos"){
+      t3="selected";
+   }else if(moneda=="Dolares"){
+     t4="selected";
    }
    if(tipo=="Grupos"){
       t1="selected";
    }else if(tipo=="Individuales"){
      t2="selected";
-   }
-      
+   }  
+
+
+
     Swal.fire({
       title: 'Editar '+id,
       html: '<br>'+
@@ -591,12 +616,26 @@
                         '<input class="form-control" type="text" id="obvalue" placeholder="observacion" value='+ob+'>'+
         
                 '</div>'+
+                '<div class="form-group">'+
+                        '<input class="form-control" type="number" id="totalvalue" placeholder="Total" value='+total+'>'+
+        
+                '</div>'+
                '<div class="form-group">'+
                   '<label for="gruposvalue">Seleccione su tipo de factura</label>'+
                   '<select id="gruposvalue" class="form-control" >'+
                   '<option></option>'+
                    '<option '+t1+'>Grupos</option>'+
                     '<option '+t2+'>Individuales</option>'+
+                   '</select>'+
+                '</div>'+
+                
+                '</div>'+
+               '<div class="form-group">'+
+                  '<label for="monedavalue">Seleccione su Moneda</label>'+
+                  '<select id="monedavalue" class="form-control" >'+
+                  '<option></option>'+
+                   '<option '+t3+'>Pesos</option>'+
+                    '<option '+t4+'>Dolares</option>'+
                    '</select>'+
                 '</div>'+
 
@@ -611,8 +650,10 @@
 
 
       if (result.value) {
-        var  obvalue= document.getElementById("obvalue").value;
+        var obvalue= document.getElementById("obvalue").value;
+        var totalvalue= document.getElementById("totalvalue").value;
         var gruposvalue=document.getElementById("gruposvalue").value;
+        var monedavalue=document.getElementById("monedavalue").value;
 
         $.ajaxSetup({
             headers: {
@@ -624,7 +665,7 @@
           url: "{{url('/system/companie/documents/edit_fields')}}",
           method: 'post',
           dataType: "JSON",
-          data: {"id":id,"obvalue":obvalue,"gruposvalue":gruposvalue},
+          data: {"id":id,"obvalue":obvalue,"gruposvalue":gruposvalue,"monedavalue":monedavalue,"totalvalue":totalvalue},
           success: function(result){
 
 
