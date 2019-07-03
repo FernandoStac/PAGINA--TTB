@@ -1166,7 +1166,8 @@ display: none;
 background: red;
 }
 #documentsProvee_filter,#documentsevaluation_filter,#documentsevaluation_info{
-  display: none;  
+  display: none;
+  /* background: red;   */
 }
 
 
@@ -1216,8 +1217,27 @@ background: red;
 }
 
 #documentsProvee,#myTable,#documentsevaluation{
-    width: 100% !important;
+    /* width: 100% !important; */
+}tr{
+    text-align: center;
 }
+   td{
+    text-align: left;
+
+   }
+
+
+
+/* th{
+    width: 70%;
+    text-align: left;
+    vertical-align: top;
+    padding: 0.3em;
+    caption-side: bottom;
+    
+
+     
+} */
 
 table.dataTable tbody th, table.dataTable tbody td {
     padding: 7px 10px;
@@ -1275,4 +1295,45 @@ table.dataTable tbody th, table.dataTable tbody td {
     -webkit-transform: none;
     -ms-transform: none;
     -moz-transform: none;
+}
+
+
+.dt-buttons .dt-button {
+       /* color: -webkit-link;
+   cursor: pointer;
+   text-decoration: underline;
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 10px;
+   
+    background-color: #FFFFFF;
+    
+    float: left;
+    border: 1px solid 66615B;
+  }
+  .dt-button:hover{
+    color: #f33816;
+    background-color: #66615B; */
+  
+content:”;
+margin-bottom: 10px;
+cursor: pointer;
+
+position: center;
+top: 10px;
+left: 10px;
+width: 100%;
+font-weight: 600;
+color: #66615B;
+height: 40px;
+background-color: #FFFFFF;
+border-radius: .2rem;
+
+  }.dt-button:hover{
+    color: #ffffff;
+    background-color: #f5593d; 
+    border-color: #f5593d;
+    line-height: 20pt; 
+
 }

@@ -2,9 +2,8 @@
 
 namespace App\Exports;
 
-use App\User;
+use App\document;
 use Maatwebsite\Excel\Concerns\FromCollection;
-
 
 class UsersExport implements FromCollection
 {
@@ -13,6 +12,6 @@ class UsersExport implements FromCollection
     */
     public function collection()
     {
-        return User::all();
+        return document::all();
     }
 }

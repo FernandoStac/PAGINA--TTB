@@ -114,7 +114,7 @@
            orderCellsTop: true,
            "order": [[ 4, "desc" ]],
            columnDefs:[{targets:4, render:function(data){
-              return moment(data).format('D/MM/Y');
+              return moment(data).format('DD/MM/Y');
             }}],
             rowCallback: function(row, data, index){
                 if(data[1] == "Rechazado"){

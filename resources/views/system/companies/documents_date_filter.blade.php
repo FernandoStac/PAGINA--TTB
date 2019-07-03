@@ -22,13 +22,7 @@
               <input type="hidden" id="fieldValues" name="fieldValues">
             <a class="nav-link" href="#"   onclick="idGet()"><i class="fa fa-file-pdf-o"></i> Descargar por filtro</a>
             </form>
-          </li>
-          <li class="nav-item">
-            <form id="byFilter" action="{{ url('create_zip_filter')}}" method="post">
-              {{csrf_field()}}
-              <input type="hidden" id="fieldValues" name="fieldValues">
-            <a class="nav-link" href="#"   onclick="idGet()"><i class="fa fa-file-excel-o"></i> Descargar Xls</a>
-            </form>
+         
           </li>
 
           @if(App\Access::canEnter("Editar empresas"))
@@ -84,6 +78,7 @@
                <input type="button" name="searchdate" id="searchdate" value="Filtrar" class="btn btn-danger btn-sm form-control" />       
               </div>
            </div>
+   
 
 
     <div class="col-md-12">
@@ -100,6 +95,8 @@
               <th scope="col">Moneda</th>
               <th scope="col">Tipo</th>
               <th scope="col">Total</th>
+              <th scope="col">Pagado</th>
+              <th scope="col">Subclasificacion</th>
               <th scope="col">Fecha</th>
               <th scope="col">Acciones</th>
             </tr>
@@ -216,6 +213,23 @@
 
 @section('scripts')
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+
+
+
+
+
+
+
+
+
+
 
 <script>
   var dataTable;
@@ -336,6 +350,18 @@
   function fetch_data(range_date, start_date='', end_date=''){
     var ncompany = $('#ncompany').val();
     dataTable = $('#documentsevaluation').DataTable({
+    //   {<font></font>
+    // responsive: true<font></font>
+    //   } );<font></font>
+      
+      dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',text:'Enviar Vista a Excel',
+            autoFilter: true,
+            sheetName: 'Exported data'
+        } 
+        ],
+      
       "language": {
         //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
         "sProcessing":     "Procesando...",
@@ -355,6 +381,7 @@
         }
       },
       
+      
       "columns": [
             { data: "id" },
             { data: "proveedor" },
@@ -364,15 +391,19 @@
             { data: "observ_1" }, 
             { data: "Moneda" },
             { data: "tipo" },
-            { data: "Total" },            
+            { data: "Total" },
+            { data: "Pagado" },
+            { data: "Subclasificacion" },            
             {data: "created_at"},
             { "defaultContent": '@if(App\Access::canEnter("Evaluador 1") or App\Access::canEnter("Evaluador 2") or App\Access::canEnter("Evaluador 3") or App\Access::canEnter("Evaluador Maestro")) <a title="Validar documento" class="text-info font-weight-bold document_validate pointer" style="cursor:pointer;"><i class="fa fa-check"></i>-</a> @endif @if(App\Access::canEnter("Eliminar documentos"))<a title="Eliminar el archivo" class="text-info font-weight-bold document_delete pointer" style="cursor:pointer;"><i class="fa fa-trash"></i></a>- @endif <a title="Ver archivo PDF" class="see_pdf text-success font-weight-bold" style="cursor:pointer;"><i class="fa fa-file-pdf-o"></i></a><a class="see_xml text-success font-weight-bold" style="cursor:pointer;">-<i class="fa fa-file-code-o" title="Ver XML"></i> </a> @if(App\Access::canEnter("Editar facturas"))<a title="Editar campos" class="text-info font-weight-bold document_edit_fields pointer" style="cursor:pointer;">-<i class="fa fa-edit"></i></a> @endif' }
           
           ],
           
-          columnDefs:[{targets:9, render:function(data){
+          
+          columnDefs:[{targets:11, render:function(data){
               return moment(data).format('D/MM/Y');
             }}],
+
 
 
           rowCallback: function(row, data, index){
@@ -584,13 +615,21 @@
    var tipo = (dataTable.row( colu.parents('tr') ).data()).tipo;
    var moneda = (dataTable.row( colu.parents('tr') ).data()).Moneda;
    var total = (dataTable.row( colu.parents('tr') ).data()).Total; 
-  //  alert(total);
+   var pagado = (dataTable.row( colu.parents('tr') ).data()).Pagado; 
+   var subclasificacion = (dataTable.row( colu.parents('tr') ).data()).Subclasificacion; 
+  
    let t1="";
    let t2="";
    let t3="";
    let t4="";
+   let t5="";
+   let t6="";
+  
    if(ob===null){
      ob="";
+   }
+   if(subclasificacion===null){
+    subclasificacion="";
    }
    if(total===null){
     total="";
@@ -605,7 +644,11 @@
    }else if(tipo=="Individuales"){
      t2="selected";
    }  
-
+   if(pagado=="Transferencia"){
+      t5="selected";
+   }else if(pagado=="Efectivo"){
+     t6="selected";
+   }  
 
 
     Swal.fire({
@@ -614,12 +657,16 @@
             '<form>'+
                 '<div class="form-group">'+
                         '<input class="form-control" type="text" id="obvalue" placeholder="observacion" value='+ob+'>'+
-        
+                       
                 '</div>'+
                 '<div class="form-group">'+
                         '<input class="form-control" type="number" id="totalvalue" placeholder="Total" value='+total+'>'+
         
                 '</div>'+
+
+
+
+
                '<div class="form-group">'+
                   '<label for="gruposvalue">Seleccione su tipo de factura</label>'+
                   '<select id="gruposvalue" class="form-control" >'+
@@ -637,8 +684,22 @@
                    '<option '+t3+'>Pesos</option>'+
                     '<option '+t4+'>Dolares</option>'+
                    '</select>'+
+                   
+                   '</div>'+
+               '<div class="form-group">'+
+                  '<label for="pagadovalue">Seleccione su Forma de pago</label>'+
+                  '<select id="pagadovalue" class="form-control" >'+
+                  '<option></option>'+
+                   '<option '+t5+'>Transferencia</option>'+
+                    '<option '+t6+'>Efectivo</option>'+
+                   '</select>'+
+                   
+                   '</div>'+
+                   '<div class="form-group">'+
+                        '<input class="form-control" type="text" id="subvalue" placeholder="observacion" value='+subclasificacion+'>'+
                 '</div>'+
-
+                  
+        
               '</form>',
       allowOutsideClick: false,
       showCancelButton: true,
@@ -653,7 +714,9 @@
         var obvalue= document.getElementById("obvalue").value;
         var totalvalue= document.getElementById("totalvalue").value;
         var gruposvalue=document.getElementById("gruposvalue").value;
-        var monedavalue=document.getElementById("monedavalue").value;
+        var monedavalue=document.getElementById("monedavalue").value
+        var pagadovalue=document.getElementById("pagadovalue").value;
+        var subvalue=document.getElementById("subvalue").value;
 
         $.ajaxSetup({
             headers: {
@@ -665,7 +728,7 @@
           url: "{{url('/system/companie/documents/edit_fields')}}",
           method: 'post',
           dataType: "JSON",
-          data: {"id":id,"obvalue":obvalue,"gruposvalue":gruposvalue,"monedavalue":monedavalue,"totalvalue":totalvalue},
+          data: {"id":id,"obvalue":obvalue,"gruposvalue":gruposvalue,"monedavalue":monedavalue,"totalvalue":totalvalue,"pagadovalue":pagadovalue,"subvalue":subvalue},
           success: function(result){
 
 
