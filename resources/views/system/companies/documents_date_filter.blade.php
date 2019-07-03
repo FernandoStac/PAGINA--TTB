@@ -655,10 +655,12 @@
       title: 'Editar '+id,
       html: '<br>'+
             '<form>'+
+            '<label for="pagadovalue">Capture las Observaciones </label>'+
                 '<div class="form-group">'+
                         '<input class="form-control" type="text" id="obvalue" placeholder="observacion" value='+ob+'>'+
                        
                 '</div>'+
+                '<label for="pagadovalue">Capture el Total de la Factura </label>'+
                 '<div class="form-group">'+
                         '<input class="form-control" type="number" id="totalvalue" placeholder="Total" value='+total+'>'+
         
@@ -696,6 +698,7 @@
                    
                    '</div>'+
                    '<div class="form-group">'+
+                   '<label for="pagadovalue">Capture la Subclasificacion </label>'+
                         '<input class="form-control" type="text" id="subvalue" placeholder="observacion" value='+subclasificacion+'>'+
                 '</div>'+
                   
