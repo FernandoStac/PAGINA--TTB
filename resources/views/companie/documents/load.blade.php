@@ -42,13 +42,13 @@
                 </div>
                   <div class="form-group">
                     <label for="document">Cargar archivo PDF</label>
-                    <input type="file" class="form-control-file" id="document" name="document" required=".pdf" accept=".pdf" title="Seleccio el documento correspondiente">
+                    <input type="file" class="form-control-file" id="document" name="document" required=".pdf,.rar,.zip" accept=".pdf,.rar,.zip" title="Seleccio el documento correspondiente">
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="xml">Cargar archivo XML</label>
                     <input type="file" class="form-control-file" id="xml" name="xml"  accept=".xml" title="Seleccio el documento XML correspondiente">
-                </div>
+                </div> -->
 
                 <button class="btn btn-danger" id="sendfile">Guardar</button>
                   
@@ -76,7 +76,7 @@
     //llamado xml
       var fileInputxml = document.getElementById('xml');
       var filePath = fileInput.value;
-      var allowedExtensions = /(.pdf|.xml)$/i;
+      var allowedExtensions = /(.pdf|.xml|.rar|.zip)$/i;
 
  
       if(!allowedExtensions.exec(filePath)){

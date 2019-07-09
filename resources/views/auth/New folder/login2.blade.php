@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="footer register-footer text-center">
-                        <h6>&copy; <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by JJAvier </h6>
+                        <h6>&copy; <script>document.write(new Date().getFullYear())</script>, made with11 <i class="fa fa-heart heart"></i> by JJAvier </h6>
                     </div>
                 </div>
         </div>
