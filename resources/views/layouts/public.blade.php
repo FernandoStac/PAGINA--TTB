@@ -37,7 +37,9 @@
                     <span class="navbar-toggler-bar"></span>
                     <span class="navbar-toggler-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{url('/')}}">I-PDF</a>
+                <a class="navbar-brand" href="{{('/')}}">I-PDF</a>
+                <a class="navbar-brand"  href="{{asset('assets/img/Manual proveedores.pdf')}}"» target=»_blank» ></i>MANUAL PROVEEDOR</a>
+                <a class="navbar-brand"  href="{{asset('assets/img/Manual interno.pdf')}}"» target=»_blank» ></i>MANUAL USUARIO</a>
             </div>
                 <div class="collapse navbar-collapse" id="navbarToggler">
                     
