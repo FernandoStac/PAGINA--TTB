@@ -613,7 +613,7 @@
    var id = (dataTable.row( colu.parents('tr') ).data()).id; 
    var ob = (dataTable.row( colu.parents('tr') ).data()).observ_1; 
    var tipo = (dataTable.row( colu.parents('tr') ).data()).observ_2;
-   var v_2 = (dataTable.row( colu.parents('tr') ).data()).v_2;
+   var moneda = (dataTable.row( colu.parents('tr') ).data()).moneda;
    var total = (dataTable.row( colu.parents('tr') ).data()).Total; 
    var pagado = (dataTable.row( colu.parents('tr') ).data()).Pagado; 
    var subclasificacion = (dataTable.row( colu.parents('tr') ).data()).Subclasificacion; 
@@ -634,9 +634,9 @@
    if(total===null){
     total="";
    }
-   if(v_2=="Pesos"){
+   if(moneda=="Pesos"){
       t3="selected";
-   }else if(v_2=="Dolares"){
+   }else if(moneda=="Dolares"){
      t4="selected";
    }
    if(tipo=="Grupos"){
@@ -680,8 +680,8 @@
                 
                 '</div>'+
                '<div class="form-group">'+
-                  '<label for="v_2value">Seleccione su Moneda</label>'+
-                  '<select id="v_2value" class="form-control" >'+
+                  '<label for="monedavalue">Seleccione su Moneda</label>'+
+                  '<select id="monedavalue" class="form-control" >'+
                   '<option></option>'+
                    '<option '+t3+'>Pesos</option>'+
                     '<option '+t4+'>Dolares</option>'+
@@ -717,7 +717,7 @@
         var obvalue= document.getElementById("obvalue").value;
         var totalvalue= document.getElementById("totalvalue").value;
         var gruposvalue=document.getElementById("gruposvalue").value;
-        var v_2value=document.getElementById("v_2value").value
+        var monedavalue=document.getElementById("monedavalue").value
         var pagadovalue=document.getElementById("pagadovalue").value;
         var subvalue=document.getElementById("subvalue").value;
 
@@ -731,7 +731,7 @@
           url: "{{url('/system/companie/documents/edit_fields')}}",
           method: 'post',
           dataType: "JSON",
-          data: {"id":id,"obvalue":obvalue,"gruposvalue":gruposvalue,"v_2value":v_2value,"totalvalue":totalvalue,"pagadovalue":pagadovalue,"subvalue":subvalue},
+          data: {"id":id,"obvalue":obvalue,"gruposvalue":gruposvalue,"monedavalue":monedavalue,"totalvalue":totalvalue,"pagadovalue":pagadovalue,"subvalue":subvalue},
           success: function(result){
 
 

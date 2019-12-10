@@ -61,7 +61,7 @@
           <div class="card-body">
             <h5 class="card-title"><i class="fa fa-building"></i>  {{$companie->name}}</h5>
             <p class="card-text">{{$companie->name_short}}</p>
-            <a href="{{url('system/companie/'.$companie->name_short.'/documents')}}" class="btn btn-primary">Entrar</a>
+           <!-- <a href="{{url('system/companie/'.$companie->name_short.'/documents')}}" class="btn  btn-primary">Entrar</a> -->
             <a href="{{url('system/companie/date/'.$companie->name_short.'/documents')}}" class="btn btn-primary">Ver por Fechas</a>
             @if(App\Access::canEnter("Eliminar empresas"))
                <button class="btn btn-danger" onclick="st_deleteCompany({{$companie->id}});">Eliminar empresa</button>

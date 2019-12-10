@@ -580,7 +580,7 @@ class DocumentController extends Controller{
     $document=document::find($request->id);
     $user_id=Auth::user()->id;
     $document->observ_2=$request->gruposvalue;
-    $document->v_2=$request->v_2value;
+    $document->moneda=$request->monedavalue;
     $document->total=$request->totalvalue;  
     $document->observ_1=$request->obvalue;
     $document->pagado=$request->pagadovalue;
